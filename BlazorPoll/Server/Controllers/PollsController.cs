@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using BlazorPoll.Shared.Models;
@@ -17,9 +18,14 @@ namespace BlazorPoll.Server.Controllers
         public PollsController()
         {
             inMemoryPolls = new List<Poll>();
+            
+            inMemoryPolls.Add(new Poll()
+            {
+                Question = "this is a question"
+            });
         }
 
-        [HttpGet("id")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Poll>> GetPollById(int id)
         {
             var poll = inMemoryPolls.First(p => p.Id == id);

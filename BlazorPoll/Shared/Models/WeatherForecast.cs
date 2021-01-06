@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlazorPoll.Shared
+namespace HelloWorld_Blazor_Wasm_Hosted.Shared
 {
     public class WeatherForecast
     {

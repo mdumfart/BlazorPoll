@@ -1,0 +1,15 @@
+﻿<div class="answer-wrapper">
+    <div class="answer-header">
+        Answer @(Item.Id + 1)
+    </div>
+    <div class="answer-content">
+        <div class="input-group input-group-lg input-create-poll">
+            <input type="text" @bind="Item.Content" class="form-control input-answer" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="Answer">
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Answer Item { get; set; }
+}

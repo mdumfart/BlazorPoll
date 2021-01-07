@@ -12,5 +12,21 @@ namespace BlazorPoll.Shared.Models
         public int PollId { get; set; }
         public string Content { get; set; }
         public int Count { get; set; }
+
+        public Answer()
+        {
+            Id = -1;
+            PollId = -1;
+            Content = "";
+            Count = 0;
+        }
+
+        public Answer(int id)
+        {
+            Id = id;
+            PollId = -1;
+            Content = "";
+            Count = 0;
+        }
     }
 }

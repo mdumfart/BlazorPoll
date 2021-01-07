@@ -1,7 +1,38 @@
-﻿@page "/create"
+﻿@page "/create/{question?}"
 
-<h3>CreatePoll</h3>
+<div class="content-centered-horizontal content-centered-vertical index-create-container">
+    <h1>Create Poll</h1>
+    <div class="question-wrapper">
+        <div class="question-header">
+            What's on your mind?
+        </div>
+        <div class="input-group input-group-lg input-create-poll">
+            <input type="text" @bind="Poll.Question" class="form-control input-question-create" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="Question">
+        </div>
+    </div>
+    <div class="answers-wrapper">
+        @foreach (var answer in Poll.Answers)
+        {
+            <AnswerComp Item="answer"/>
+        }
+    </div>
+    <button class="btn btn-primary nav-button button-question-create">Create</button>
+</div>
 
 @code {
+    [Parameter]
+    public string Question { get; set; }
+
+    public Poll Poll { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Poll = new Poll
+        {
+            Question = Question,
+            Answers = new List<Answer> {new Answer(0), new Answer(1)}
+        };
+
+    }
 
 }

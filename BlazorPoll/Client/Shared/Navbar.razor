@@ -1,12 +1,22 @@
 ﻿<div class="navbar-wrapper">
-    <NavLink href="create">
-        <button class="btn btn-primary nav-button">Create new poll</button>
-    </NavLink>
-    <NavLink href="login">
-        <button class="btn btn-primary nav-button">Login</button>
-    </NavLink>
+    <a href="/" class="navbar-icon-wrapper">
+        <span class="fa fa-poll navbar-icon"></span>
+        <div class="navbar-title">BlazorPoll</div>
+    </a>
+    <div class="nav-items-wrapper">
+        <NavLink href="create">
+            <button class="btn btn-primary nav-button">
+                <div class="nav-button-content">
+                    <span class="fa fa-plus new-poll-icon"></span>
+                    <div>New poll</div>
+                </div>
+            </button>
+        </NavLink>
+        <NavLink href="login">
+            <button class="btn btn-primary nav-button">Login</button>
+        </NavLink>
+    </div>
 </div>
-<span class="fa fa-save"></span>
 
 @code {
 

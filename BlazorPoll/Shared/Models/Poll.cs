@@ -12,8 +12,8 @@ namespace BlazorPoll.Shared.Models
         public string Question { get; set; }
         public string Description { get; set; }
         public User Author { get; set; }
-        public IEnumerable<Answer> Answers { get; set; }
-        public IEnumerable<Comment> Comments { get; set; }
+        public List<Answer> Answers { get; set; }
+        public List<Comment> Comments { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 }

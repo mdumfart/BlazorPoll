@@ -1,0 +1,25 @@
+﻿.question-wrapper {
+    margin-top: 5vh;
+}
+
+.question-header {
+    padding-left: 15px;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.input-create-poll {
+    width: 50vw;
+}
+
+.input-question-create {
+    margin-top: 1vh;
+}
+
+.answers-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 50vw;
+    margin-top: 30px;
+}

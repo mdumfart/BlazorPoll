@@ -1,22 +1,39 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;900&display=swap');
 
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+:root {
+    --black-primary: #0d1f2d;
+    --black-primary-light: rgba(13, 31, 45, 0.7);
+    --black-primary-super-light: rgba(13, 31, 45, 0.2);
+    --blue-primary: #546A7B;
+    --blue-secondary: #9ea3b0;
 }
 
-a, .btn-link {
-    color: #0366d6;
+
+html, body {
+    font-family: Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: var(--black-primary);
 }
 
 .btn-primary {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
+    background-color: var(--blue-primary);
+    border: 3px solid var(--black-primary);
+    padding-left: 15px;
+    padding-right: 15px;
+    font-weight: bold;
 }
 
-.content {
-    padding-top: 1.1rem;
+.btn-primary:hover {
+    background-color: var(--black-primary) !important;
+    border: 3px solid var(--black-primary);
 }
+
+.form-control:focus {
+    border: 2px solid var(--blue-primary);
+    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(84, 106, 123, 0.7);
+}
+
 
 .valid.modified:not([type=checkbox]) {
     outline: 1px solid #26b050;
@@ -42,9 +59,52 @@ a, .btn-link {
     z-index: 1000;
 }
 
-    #blazor-error-ui .dismiss {
-        cursor: pointer;
-        position: absolute;
-        right: 0.75rem;
-        top: 0.5rem;
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
+
+h1 {
+    font-size: 38px;
+    font-weight: bold;
+}
+
+.content-centered-horizontal {
+    display: flex;
+    justify-content: center;
+}
+
+.content-centered-vertical {
+    display: flex;
+    align-items: center;
+}
+
+.index-create-container {
+    height: 60vh;
+    flex-direction: column;
+}
+
+.input-question-create-wrapper {
+    width: 50vw;
+}
+
+.input-question-create {
+    margin-top: 4vh;
+}
+
+.button-question-create {
+    margin-top: 2vh;
+    width: 10vw;
+}
+
+@media only screen and (max-width: 720px) {
+    .input-question-create-wrapper {
+        width: 80vw;
     }
+
+    .button-question-create {
+        width: 70vw;
+    }
+}

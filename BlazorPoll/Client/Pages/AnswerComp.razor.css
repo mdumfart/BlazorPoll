@@ -1,0 +1,19 @@
+﻿.answer-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.answer-header {
+    width: 100%;
+    padding-left: 15px;
+    font-weight: bold;
+    color: var(--black-primary-light);
+}
+
+.answer-content {
+    margin-top: 5px;
+    width: 100%;
+}

@@ -13,13 +13,11 @@ namespace BlazorPoll.Server.Controllers
     [ApiController]
     public class PollsController : ControllerBase
     {
-        private readonly List<Poll> inMemoryPolls;
+        private static readonly List<Poll> InMemoryPolls = new List<Poll>();
 
         public PollsController()
         {
-            inMemoryPolls = new List<Poll>();
-            
-            inMemoryPolls.Add(new Poll()
+            InMemoryPolls.Add(new Poll()
             {
                 Question = "this is a question"
             });
@@ -28,7 +26,7 @@ namespace BlazorPoll.Server.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Poll>> GetPollById(int id)
         {
-            var poll = inMemoryPolls.First(p => p.Id == id);
+            var poll = InMemoryPolls.First(p => p.Id == id);
 
             if (poll == null)
                 return NotFound(new ProblemDetails()
@@ -43,8 +41,8 @@ namespace BlazorPoll.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePoll(Poll poll)
         {
-            poll.Id = inMemoryPolls.Count;
-            inMemoryPolls.Add(poll);
+            poll.Id = InMemoryPolls.Count;
+            InMemoryPolls.Add(poll);
 
             return CreatedAtAction(nameof(GetPollById), new {id = poll.Id}, poll);
         }

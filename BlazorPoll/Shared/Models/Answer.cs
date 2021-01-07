@@ -11,7 +11,7 @@ namespace BlazorPoll.Shared.Models
     {
         public int Id { get; set; }
         public int PollId { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Answer text is required")]
         [StringLength(100, ErrorMessage="Your answer is too long.")]
         public string Content { get; set; }
         public int Count { get; set; }

@@ -1,17 +1,21 @@
 ﻿@page "/create/{question?}"
+@using BlazorPoll.Client.Services
+@inject IPollService PollService;
 
 <div class="content-centered-horizontal content-centered-vertical create-container">
     <h1>Create Poll</h1>
 
-    <EditForm Model="Poll">
+    <EditForm Model="Poll" OnValidSubmit="ExecuteAddPoll">
         <ObjectGraphDataAnnotationsValidator />
-        <ValidationSummary />
         <div class="question-wrapper">
             <div class="question-header">
                 What's on your mind?
             </div>
-            <div class="input-group input-group-lg input-create-poll">
-                <input type="text" @bind="Poll.Question" class="form-control input-question-create" aria-label="Large" aria-describedby="inputGroup-sizing-sm" placeholder="Question">
+            <div class="input-group input-group-lg input-create-poll input-validation-wrapper">
+                <InputText class="form-control input-validate input-question-create full-width" placeholder="Provide a qestion" @bind-Value="Poll.Question" />
+                <div class="validation-message-wrapper">
+                    <ValidationMessage For="@(() => Poll.Question)"/>
+                </div>
             </div>
         </div>
 
@@ -64,6 +68,12 @@
     private void AddAnswer()
     {
         Poll.Answers.Add(new Answer(Poll.Answers.Count));
+    }
+
+    private async void ExecuteAddPoll()
+    {
+        if (await PollService.AddPoll(Poll))
+            Console.WriteLine("succ");
     }
 
 }

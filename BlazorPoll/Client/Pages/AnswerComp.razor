@@ -1,10 +1,14 @@
-﻿<div class="answer-wrapper">
+﻿
+<div class="answer-wrapper">
     <div class="answer-header">
         Answer @(Item.Id + 1)
     </div>
     <div class="answer-content">
-        <div class="input-group input-group-lg input-create-poll">
-            <InputText class="form-control input-answer" placeholder="Answer" @bind-Value="Item.Content" />
+        <div class="input-group input-group-lg input-create-poll input-validation-wrapper">
+            <InputText class="form-control input-validate full-width" placeholder="Provide an answer" @bind-Value="Item.Content" />
+            <div class="validation-message-wrapper">
+                <ValidationMessage For="@(() => Item.Content)"/>
+            </div>
         </div>
     </div>
 </div>

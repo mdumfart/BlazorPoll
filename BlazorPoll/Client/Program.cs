@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using BlazorPoll.Client.Services;
 
 namespace BlazorPoll.Client
 {
@@ -17,8 +18,10 @@ namespace BlazorPoll.Client
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-
+            builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+            builder.Services.AddSingleton<IPollService, PollService>(_ => 
+                new PollService(new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) }));
+            
             await builder.Build().RunAsync();
         }
     }

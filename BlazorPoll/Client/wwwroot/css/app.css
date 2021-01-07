@@ -35,12 +35,9 @@ html, body {
 }
 
 
-.valid.modified:not([type=checkbox]) {
-    outline: 1px solid #26b050;
-}
-
-.invalid {
-    outline: 1px solid red;
+.input-group > .custom-select:not(:last-child), .input-group > .form-control:not(:last-child) {
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
 }
 
 .validation-message {
@@ -97,6 +94,33 @@ h1 {
 .button-question-create {
     margin-top: 2vh;
     width: 10vw;
+}
+
+.input-validate.invalid {
+    outline: none;
+    border: 1px solid red;
+}
+
+.input-validate.valid {
+    outline: none;
+}
+
+.input-validate.valid.modified {
+    outline: none;
+    border: 1px solid green;
+}
+
+.full-width {
+    width: 50vw !important;
+}
+
+.validation-message-wrapper {
+    font-size: 12px;
+}
+
+.input-validation-wrapper {
+    display: flex;
+    flex-direction: column
 }
 
 @media only screen and (max-width: 720px) {

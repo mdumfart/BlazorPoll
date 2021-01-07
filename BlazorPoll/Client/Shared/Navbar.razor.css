@@ -4,7 +4,7 @@ a.navbar-title:link {
 }
 
 .navbar-wrapper {
-    height: 6vh;
+    height: 7vh;
     width: 100%;
     display: flex;
     justify-content: space-between;

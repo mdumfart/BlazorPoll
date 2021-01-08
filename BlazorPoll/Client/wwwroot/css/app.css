@@ -123,6 +123,14 @@ h1 {
     flex-direction: column
 }
 
+.loading-visible {
+    visibility: visible;
+}
+
+.loading-invisible {
+    visibility: collapse;
+}
+
 @media only screen and (max-width: 720px) {
     .input-question-create-wrapper {
         width: 80vw;

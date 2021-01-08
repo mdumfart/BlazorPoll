@@ -20,19 +20,22 @@ namespace BlazorPoll.Client.Services
             this.httpClient = httpClient;
         }
         
-        public async Task<bool> AddPoll(Poll poll)
+        public async Task<Guid> AddPoll(Poll poll)
         {
             var resp = await httpClient.PostAsync("api/polls", GetStringContent(poll));
 
             if (resp.IsSuccessStatusCode)
-                return true;
+            {
+                var resultPoll = await resp.Content.ReadAsAsync<Poll>();
+                return resultPoll.Id;
+            }
 
-            return false;
+            return Guid.Empty;
         }
 
-        public async Task<Poll> GetPollById(int id)
+        public async Task<Poll> GetPollById(Guid id)
         {
-            return await httpClient.GetFromJsonAsync<Poll>("/api/polls/{id}");
+            return await httpClient.GetFromJsonAsync<Poll>($"/api/polls/{id.ToString()}");
         }
 
         private StringContent GetStringContent(object o)

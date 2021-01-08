@@ -8,7 +8,7 @@ namespace BlazorPoll.Client.Services
 {
     public interface IPollService
     {
-        Task<bool> AddPoll(Poll poll);
-        Task<Poll> GetPollById(int id);
+        Task<Guid> AddPoll(Poll poll);
+        Task<Poll> GetPollById(Guid id);
     }
 }

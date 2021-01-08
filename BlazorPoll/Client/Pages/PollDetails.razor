@@ -1,0 +1,42 @@
+﻿@page "/poll/{id}"
+@using BlazorPoll.Client.Services
+@inject IPollService PollService;
+
+@if (Poll == null)
+{
+    <NoPollFound />
+}
+else
+{
+    <h3>PollDetails</h3>
+    @Poll.Question
+}
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    public Poll Poll { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Guid guidFromParams = Guid.Empty;
+
+        try
+        {
+            guidFromParams = new Guid(Id);
+            Poll = await GetPollByIdAsync(guidFromParams);
+        }
+        catch (Exception e)
+        {
+            // When Guid creation or http call fails
+            Poll = null;
+        }
+    }
+
+    private async Task<Poll> GetPollByIdAsync(Guid id)
+    {
+        return await PollService.GetPollById(id);
+    }
+
+}

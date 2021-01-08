@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using BlazorPoll.Shared.Models;
 
@@ -24,7 +25,7 @@ namespace BlazorPoll.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Poll>> GetPollById(int id)
+        public async Task<ActionResult<Poll>> GetPollById(Guid id)
         {
             var poll = InMemoryPolls.First(p => p.Id == id);
 
@@ -41,7 +42,9 @@ namespace BlazorPoll.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePoll(Poll poll)
         {
-            poll.Id = InMemoryPolls.Count;
+            Thread.Sleep(2000);
+            
+            poll.Id = Guid.NewGuid();
             InMemoryPolls.Add(poll);
 
             return CreatedAtAction(nameof(GetPollById), new {id = poll.Id}, poll);

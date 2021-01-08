@@ -1,5 +1,6 @@
 ﻿@page "/create/{question?}"
 @using BlazorPoll.Client.Services
+@inject NavigationManager NavigationManager
 @inject IPollService PollService;
 
 <div class="content-centered-horizontal content-centered-vertical create-container">
@@ -14,7 +15,7 @@
             <div class="input-group input-group-lg input-create-poll input-validation-wrapper">
                 <InputText class="form-control input-validate input-question-create full-width" placeholder="Provide a qestion" @bind-Value="Poll.Question" />
                 <div class="validation-message-wrapper">
-                    <ValidationMessage For="@(() => Poll.Question)"/>
+                    <ValidationMessage For="@(() => Poll.Question)" />
                 </div>
             </div>
         </div>
@@ -37,7 +38,7 @@
         <div class="answers-wrapper">
             @foreach (var answer in Poll.Answers)
             {
-                <AnswerComp Item="answer"/>
+                <AnswerComp Item="answer" />
             }
             <button class="btn btn-primary btn-add-answer" @onclick="AddAnswer">
                 <div class="nav-button-content">
@@ -45,7 +46,16 @@
                 </div>
             </button>
         </div>
-        <button type="submit" class="btn btn-primary nav-button button-question-create">Publish Poll</button>
+        <button type="submit" class="btn btn-primary nav-button button-question-create">
+            @if (IsLoading)
+            {
+                <Bounce Size="20px" Color="#fff" class="@(IsLoading? "loading-visible" : "loading-invisible")" />
+            }
+            else
+            {
+                <span class="@(!IsLoading? "loading-visible" : "loading-invisible")">Publish Poll</span>
+            }
+        </button>
     </EditForm>
 
 </div>
@@ -55,13 +65,14 @@
     public string Question { get; set; }
 
     public Poll Poll { get; set; }
+    private bool IsLoading { get; set; } = false;
 
     protected override void OnInitialized()
     {
         Poll = new Poll
         {
             Question = Question,
-            Answers = new List<Answer> {new Answer(0), new Answer(1)}
+            Answers = new List<Answer> { new Answer(0), new Answer(1) }
         };
     }
 
@@ -72,8 +83,25 @@
 
     private async void ExecuteAddPoll()
     {
-        if (await PollService.AddPoll(Poll))
-            Console.WriteLine("succ");
+        if (!IsLoading)
+        {
+            IsLoading = true;
+            var id = await PollService.AddPoll(Poll);
+            NavigateToDetails(id);
+            IsLoading = false;
+            Console.WriteLine(IsLoading);
+        }
+    }
+
+    private void NavigateToDetails(Guid id)
+    {
+        if (String.IsNullOrEmpty(id.ToString()))
+            // TODO: Handle error
+            Console.WriteLine("Error creating poll");
+        else
+        {
+            NavigationManager.NavigateTo($"poll/{id.ToString()}");
+        }
     }
 
 }

@@ -9,9 +9,20 @@ namespace BlazorPoll.Server.Hubs
 {
     public class PollHub : Hub
     {
-        public async Task UpdatePoll(Poll poll)
+
+        public async Task SendPollToGroup(Poll poll)
         {
-            await Clients.All.SendAsync("UpdatePoll", poll);
+            await Clients.Groups(poll.Id.ToString()).SendAsync("UpdatePoll", poll);
+        }
+
+        public async Task JoinPollGroup(Poll poll)
+        {
+            await Groups.AddToGroupAsync(Context.ConnectionId, poll.Id.ToString());
+        }
+
+        public async Task LeavePollGroup(Poll poll)
+        {
+            await Groups.RemoveFromGroupAsync(Context.ConnectionId, poll.Id.ToString());
         }
     }
 }

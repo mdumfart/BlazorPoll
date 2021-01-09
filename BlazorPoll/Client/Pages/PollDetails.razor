@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.SignalR.Client
 @inject IPollService PollService;
 @inject NavigationManager NavigationManager
+@implements IAsyncDisposable
 
 @if (Poll == null)
 {
@@ -12,15 +13,16 @@ else
 {
     <h3>PollDetails</h3>
     @Poll.Question
+
+    <button @onclick="Send">Click me</button>
 }
 
 @code {
     [Parameter]
     public string Id { get; set; }
-
     public Poll Poll { get; set; }
+    private IPollHubService _pollHubService;
 
-    private HubConnection hubConnection;
 
     protected override async Task OnInitializedAsync()
     {
@@ -38,26 +40,25 @@ else
         }
 
         if (Poll != null)
-            await StartPollHubConnection();
-    }
-
-    private async Task StartPollHubConnection()
-    {
-        hubConnection = new HubConnectionBuilder()
-            .WithUrl(NavigationManager.ToAbsoluteUri("/chathub"))
-            .Build();
-
-        hubConnection.On<string, string>("ReceiveMessage", (user, message) =>
         {
-            
-        });
-
-        await hubConnection.StartAsync();
+            _pollHubService = new PollHubService(NavigationManager.ToAbsoluteUri("/pollhub").ToString());
+            await _pollHubService.StartPollHubConnection(Poll);
+        }
     }
+
+    public async Task Send()
+    {
+        await _pollHubService.Send(Poll);
+    }
+
 
     private async Task<Poll> GetPollByIdAsync(Guid id)
     {
         return await PollService.GetPollById(id);
     }
 
+    public async ValueTask DisposeAsync()
+    {
+        await _pollHubService.Dispose(Poll);
+    }
 }

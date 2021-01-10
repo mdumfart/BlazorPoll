@@ -50,12 +50,28 @@
     height: 25px;
     padding: 0;
     border: none;
+    margin-right: 30px;
 }
 
 .button-question-create {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 5vh;
+    margin-top: 2.5vh;
+    margin-bottom: 5vh;
     height: 42px;
+}
+
+@media only screen and (max-width: 720px) {
+    .options-wrapper {
+        width: 90vw;
+    }
+
+    .answers-wrapper {
+        width: 90vw;
+    }
+
+    .input-create-poll {
+        width: 90vw;
+    }
 }

@@ -41,7 +41,7 @@
         <div class="answers-wrapper">
             @foreach (var answer in Poll.Answers)
             {
-                <AnswerComp Item="answer" />
+                <AnswerComp Item="answer" OnDeleteAnswer="@(() => DeleteAnswer(answer))" />
             }
             <button class="btn btn-primary btn-add-answer" @onclick="AddAnswer">
                 <div class="nav-button-content">
@@ -79,6 +79,12 @@
         };
     }
 
+    public void DeleteAnswer(Answer answer)
+    {
+        Console.WriteLine("remove");
+        Poll.Answers.Remove(answer);
+    }
+
     private void AddAnswer()
     {
         Poll.Answers.Add(new Answer(Poll.Answers.Count));
@@ -86,13 +92,14 @@
 
     private async void ExecuteAddPoll()
     {
+        Poll.CreatedAt = DateTime.Now;
+
         if (!IsLoading)
         {
             IsLoading = true;
             var id = await PollService.AddPoll(Poll);
             NavigateToDetails(id);
             IsLoading = false;
-            Console.WriteLine(IsLoading);
         }
     }
 
@@ -106,5 +113,4 @@
             NavigationManager.NavigateTo($"poll/{id.ToString()}");
         }
     }
-
 }

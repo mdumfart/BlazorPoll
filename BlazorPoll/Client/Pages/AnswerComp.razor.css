@@ -21,3 +21,32 @@
 .input-create-poll {
     width: 50vw;
 }
+
+.input-delete-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+}
+
+.delete-answer-button {
+    background-color: transparent;
+    margin-left: 10px;
+    border: none;
+    width: 20px;
+}
+
+.delete-answer {
+    font-size: 12px;
+    color: red;
+}
+
+.hide {
+    visibility: hidden;
+}
+
+@media only screen and (max-width: 720px) {
+    .input-create-poll {
+        width: 100%;
+    }
+}

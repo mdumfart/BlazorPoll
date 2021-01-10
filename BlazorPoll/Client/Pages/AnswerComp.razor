@@ -5,7 +5,12 @@
     </div>
     <div class="answer-content">
         <div class="input-group input-group-lg input-create-poll input-validation-wrapper">
-            <InputText class="form-control input-validate full-width" placeholder="Provide an answer" @bind-Value="Item.Content" />
+            <div class="input-delete-wrapper">
+                <InputText class="form-control input-validate full-width" placeholder="Provide an answer" @bind-Value="Item.Content"/>
+                <button class="delete-answer-button @((Item.Id == 0 || Item.Id == 1)? "hide" : "")" @onclick="DeleteAnswer">
+                    <span class="fa fa-trash delete-answer"></span>
+                </button>
+            </div>
             <div class="validation-message-wrapper">
                 <ValidationMessage For="@(() => Item.Content)"/>
             </div>
@@ -16,4 +21,13 @@
 @code {
     [Parameter]
     public Answer Item { get; set; }
+    [Parameter]
+    public EventCallback<Answer> OnDeleteAnswer { get; set; }
+
+    private void DeleteAnswer()
+    {
+        Console.WriteLine("remove");
+
+        OnDeleteAnswer.InvokeAsync(Item);
+    }
 }

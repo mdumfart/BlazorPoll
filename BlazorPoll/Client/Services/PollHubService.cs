@@ -10,6 +10,8 @@ namespace BlazorPoll.Client.Services
 {
     public class PollHubService : IPollHubService
     {
+        public event IPollHubService.PollChangedHandler PollChanged;
+
         private HubConnection _hubConnection;
         private readonly string url;
 
@@ -26,7 +28,7 @@ namespace BlazorPoll.Client.Services
 
             _hubConnection.On<Poll>("UpdatePoll", (poll) =>
             {
-                Console.WriteLine(poll.Id);
+                PollChanged?.Invoke(poll);
             });
             
             await _hubConnection.StartAsync();

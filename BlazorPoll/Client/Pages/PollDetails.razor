@@ -12,44 +12,45 @@
 else
 {
     <div class="poll-details-wrapper">
-        <h2>@Poll.Question</h2>
+        <VisualizePoll Poll="@Poll" @ref="VisualizePollChild"></VisualizePoll>
+        <h2 class="question-header-details">@Poll.Question</h2>
         @if (!String.IsNullOrEmpty(Poll.Description))
         {
             <div class="poll-description">@Poll.Description</div>
         }
 
-    <div class="answers-wrapper">
-        @if (Poll.IsMultipleChoice)
-        {
-            <h3>Select multiple answers:</h3>
-            <div class="answers-content-wrapper">
-                @foreach (var answer in Poll.Answers)
-                {
-                    <VoteAnswer IsMultipleChoice="true" Answer="@answer"></VoteAnswer>
-                }
-            </div>
-        }
-        else
-        {
-            <h3>Select an answer:</h3>
-            <EditForm Model="Poll.Answers">
+        <div class="answers-wrapper">
+            @if (Poll.IsMultipleChoice)
+            {
+                <h3>Select multiple answers:</h3>
                 <div class="answers-content-wrapper">
                     @foreach (var answer in Poll.Answers)
                     {
-                        <VoteAnswer IsMultipleChoice="false" Answer="@answer" OnSelectionChanged="@(() => OnRadioSelectionChanged(answer))"></VoteAnswer>
+                        <VoteAnswer IsMultipleChoice="true" Answer="@answer"></VoteAnswer>
                     }
                 </div>
-                <button class="btn btn-primary button-send-answer" type="submit" @onclick="SubmitAnswer">
-                    @if (IsLoading)
-                    {
-                        <Bounce Size="20px" Color="#fff" class="@(IsLoading? "loading-visible" : "loading-invisible")" />
-                    }
-                    else
-                    {
-                        <span class="@(!IsLoading? "loading-visible" : "loading-invisible")">Submit answer</span>
-                    }
-                </button>
-            </EditForm>
+            }
+            else
+            {
+                <h3 class="select-answer-header">Select an answer:</h3>
+                <EditForm Model="Poll.Answers">
+                    <div class="answers-content-wrapper">
+                        @foreach (var answer in Poll.Answers)
+                        {
+                            <VoteAnswer IsMultipleChoice="false" Answer="@answer" OnSelectionChanged="@(() => OnRadioSelectionChanged(answer))"></VoteAnswer>
+                        }
+                    </div>
+                    <button class="btn btn-primary button-send-answer" type="submit" @onclick="SubmitAnswer">
+                        @if (IsLoading)
+                        {
+                            <Bounce Size="20px" Color="#fff" class="@(IsLoading ? "loading-visible" : "loading-invisible")"/>
+                        }
+                        else
+                        {
+                            <span class="@(!IsLoading ? "loading-visible" : "loading-invisible")">Submit answer</span>
+                        }
+                    </button>
+                </EditForm>
             }
         </div>
     </div>
@@ -59,6 +60,7 @@ else
     [Parameter]
     public string Id { get; set; }
     public Poll Poll { get; set; }
+    private VisualizePoll VisualizePollChild;
     private bool IsLoading { get; set; } = false;
     private IPollHubService _pollHubService;
     private Answer SelectedRadioAnswer { get; set; }
@@ -97,6 +99,8 @@ else
         {
             _pollHubService = new PollHubService(NavigationManager.ToAbsoluteUri("/pollhub").ToString());
             await _pollHubService.StartPollHubConnection(Poll);
+
+            _pollHubService.PollChanged += async (poll) => await VisualizePollChild.UpdatePoll(poll);
         }
     }
 
@@ -125,7 +129,6 @@ else
         IsLoading = true;
         var result = await PollService.SendSinglePollAnswer(Poll, SelectedRadioAnswer, _pollHubService);
         IsLoading = false;
-        Console.WriteLine(result);
     }
 
 }

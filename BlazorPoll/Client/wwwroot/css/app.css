@@ -141,4 +141,8 @@ h1 {
         width: 70vw;
         min-width: 100px;
     }
+
+    .full-width {
+        width: 100% !important;
+    }
 }

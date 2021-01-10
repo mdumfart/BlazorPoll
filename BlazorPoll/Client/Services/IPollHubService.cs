@@ -8,6 +8,9 @@ namespace BlazorPoll.Client.Services
 {
     public interface IPollHubService
     {
+        public delegate void PollChangedHandler(Poll poll);
+        public event PollChangedHandler PollChanged;
+        
         Task StartPollHubConnection(Poll poll);
         Task Send(Poll poll);
         Task Dispose(Poll poll);

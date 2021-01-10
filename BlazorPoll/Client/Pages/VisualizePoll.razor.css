@@ -1,0 +1,12 @@
+﻿.chart-wrapper {
+    position: relative;
+    height: 30vh;
+    width: 50vw;
+}
+
+@media only screen and (max-width: 720px) {
+    .chart-wrapper {
+        position: relative;
+        width: 90vw;
+    }
+}

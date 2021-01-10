@@ -1,0 +1,17 @@
+﻿.answer-wrapper {
+    padding: 15px 15px 15px 35px;
+    margin-bottom: 8px;
+    border: 1px solid var(--black-primary-light);
+    border-radius: 5px;
+}
+
+.answer-wrapper:hover {
+    cursor: pointer;
+    font-weight: bold;
+    background-color: var(--black-primary-light);
+    color: var(--white);
+}
+
+.answer-label {
+    cursor: pointer;
+}

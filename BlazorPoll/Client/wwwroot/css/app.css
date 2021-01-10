@@ -94,6 +94,7 @@ h1 {
 .button-question-create {
     margin-top: 2vh;
     width: 10vw;
+    min-width: 100px;
 }
 
 .input-validate.invalid {
@@ -138,5 +139,6 @@ h1 {
 
     .button-question-create {
         width: 70vw;
+        min-width: 100px;
     }
 }

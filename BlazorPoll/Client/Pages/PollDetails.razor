@@ -11,17 +11,57 @@
 }
 else
 {
-    <h3>PollDetails</h3>
-    @Poll.Question
+    <div class="poll-details-wrapper">
+        <h2>@Poll.Question</h2>
+        @if (!String.IsNullOrEmpty(Poll.Description))
+        {
+            <div class="poll-description">@Poll.Description</div>
+        }
 
-    <button @onclick="Send">Click me</button>
+    <div class="answers-wrapper">
+        @if (Poll.IsMultipleChoice)
+        {
+            <h3>Select multiple answers:</h3>
+            <div class="answers-content-wrapper">
+                @foreach (var answer in Poll.Answers)
+                {
+                    <VoteAnswer IsMultipleChoice="true" Answer="@answer"></VoteAnswer>
+                }
+            </div>
+        }
+        else
+        {
+            <h3>Select an answer:</h3>
+            <EditForm Model="Poll.Answers">
+                <div class="answers-content-wrapper">
+                    @foreach (var answer in Poll.Answers)
+                    {
+                        <VoteAnswer IsMultipleChoice="false" Answer="@answer" OnSelectionChanged="@(() => OnRadioSelectionChanged(answer))"></VoteAnswer>
+                    }
+                </div>
+                <button class="btn btn-primary button-send-answer" type="submit" @onclick="SubmitAnswer">
+                    @if (IsLoading)
+                    {
+                        <Bounce Size="20px" Color="#fff" class="@(IsLoading? "loading-visible" : "loading-invisible")" />
+                    }
+                    else
+                    {
+                        <span class="@(!IsLoading? "loading-visible" : "loading-invisible")">Submit answer</span>
+                    }
+                </button>
+            </EditForm>
+            }
+        </div>
+    </div>
 }
 
 @code {
     [Parameter]
     public string Id { get; set; }
     public Poll Poll { get; set; }
+    private bool IsLoading { get; set; } = false;
     private IPollHubService _pollHubService;
+    private Answer SelectedRadioAnswer { get; set; }
 
 
     protected override async Task OnInitializedAsync()
@@ -39,16 +79,25 @@ else
             Poll = null;
         }
 
+        //        Poll = new Poll()
+        //        {
+        //            Question = "Is this a poll?",
+        //            Answers = new List<Answer>()
+        //{
+        //                new Answer() {Id = 0, Count = 0, Content = "This is not an answer."},
+        //                new Answer() {Id = 1, Count = 0, Content = "This is another answer!"},
+        //                new Answer() {Id = 2, Count = 0, Content = "Is is not a poll."}
+        //            },
+        //            Description = "This is a very long description indeed please make it even a bit longer. Sometimes i feel the Bacc stress oh no"
+        //                + "This is a very long description indeed please make it even a bit longer. Sometimes i feel the Bacc stress oh no"
+        //                + "This is a very long description indeed please make it even a bit longer. Sometimes i feel the Bacc stress oh no"
+        //        };
+
         if (Poll != null)
         {
             _pollHubService = new PollHubService(NavigationManager.ToAbsoluteUri("/pollhub").ToString());
             await _pollHubService.StartPollHubConnection(Poll);
         }
-    }
-
-    public async Task Send()
-    {
-        await _pollHubService.Send(Poll);
     }
 
 
@@ -61,4 +110,22 @@ else
     {
         await _pollHubService.Dispose(Poll);
     }
+
+    /// <summary>
+    /// Set selected item for single choice polls
+    /// </summary>
+    /// <param name="answer">The answer to set to currently selected</param>
+    public void OnRadioSelectionChanged(Answer answer)
+    {
+        SelectedRadioAnswer = answer;
+    }
+
+    private async Task SubmitAnswer()
+    {
+        IsLoading = true;
+        var result = await PollService.SendSinglePollAnswer(Poll, SelectedRadioAnswer, _pollHubService);
+        IsLoading = false;
+        Console.WriteLine(result);
+    }
+
 }

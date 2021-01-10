@@ -38,6 +38,19 @@ namespace BlazorPoll.Client.Services
             return await httpClient.GetFromJsonAsync<Poll>($"/api/polls/{id.ToString()}");
         }
 
+        public async Task<bool> SendSinglePollAnswer(Poll poll, Answer answer, IPollHubService pollHubService)
+        {
+            var resp = await httpClient.PutAsync($"/api/polls/{poll.Id}/answer/single", GetStringContent(answer));
+
+            if (resp.IsSuccessStatusCode)
+            {
+                var updatedPoll = await GetPollById(poll.Id);
+                await pollHubService.Send(updatedPoll);
+            }
+            
+            return resp.IsSuccessStatusCode;
+        }
+
         private StringContent GetStringContent(object o)
         {
             var json = JsonConvert.SerializeObject(o);

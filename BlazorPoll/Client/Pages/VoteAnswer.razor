@@ -1,0 +1,38 @@
+﻿@if (IsMultipleChoice)
+{
+    <div>multi</div>
+}
+else
+{
+    <label class="form-check answer-wrapper">
+        <input class="form-check-input" type="radio" name="radioAnswerGroup" id="@GetRadioIdString()" value="@Answer"
+               @onchange="@(() => OnSelectionChanged.InvokeAsync(Answer))"
+               checked="@(Answer.Id == 0)">
+        <label class="form-check-label answer-label" for="@GetRadioIdString()">
+            @Answer.Content
+        </label>
+    </label>
+}
+
+@code {
+    [Parameter]
+    public bool IsMultipleChoice { get; set; }
+    [Parameter]
+    public Answer Answer { get; set; }
+    [Parameter]
+    public EventCallback<Answer> OnSelectionChanged { get; set; }
+
+    protected override Task OnInitializedAsync()
+    {
+        if (Answer.Id == 0)
+            OnSelectionChanged.InvokeAsync(Answer);
+
+        return Task.CompletedTask;
+    }
+
+    private string GetRadioIdString()
+    {
+        return $"radioAnswer{Answer.Id}";
+    }
+
+}

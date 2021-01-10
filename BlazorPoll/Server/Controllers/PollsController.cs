@@ -49,5 +49,17 @@ namespace BlazorPoll.Server.Controllers
 
             return CreatedAtAction(nameof(GetPollById), new {id = poll.Id}, poll);
         }
+
+        [HttpPut("{pollId}/answer/single")]
+        public async Task<IActionResult> AnswerPoll(Guid pollId, Answer answer)
+        {
+            Thread.Sleep(1000);
+
+            var poll = InMemoryPolls.First(p => p.Id == pollId);
+            
+            poll.Answers.First(a => a.Id == answer.Id).Count++;
+
+            return Ok();
+        }
     }
 }

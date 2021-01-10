@@ -18,6 +18,9 @@
                     <ValidationMessage For="@(() => Poll.Question)" />
                 </div>
             </div>
+            <div class="input-group input-group-lg input-create-poll input-validation-wrapper">
+                <InputTextArea class="form-control input-validate input-question-create full-width" placeholder="Provide some additional info" @bind-Value="Poll.Description" />
+            </div>
         </div>
 
         <div class="options-wrapper">

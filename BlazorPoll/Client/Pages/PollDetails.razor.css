@@ -1,0 +1,34 @@
+﻿h2 {
+    font-weight: bold;
+}
+
+h3 {
+    margin-left: 15px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.poll-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.poll-description {
+    margin-top: 15px;
+    max-width: 50vw;;
+}
+
+.answers-wrapper {
+    margin-top: 30px;
+    width: 50vw;
+}
+
+.button-send-answer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 10vw;
+    min-width: 200px;
+}

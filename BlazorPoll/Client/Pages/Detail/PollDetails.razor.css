@@ -8,11 +8,27 @@ h3 {
     font-size: 18px;
 }
 
+.copy-clipboard-wrapper {
+    background-color: transparent;
+    border: none;
+    color: var(--black-primary-light);
+    font-size: 14px
+}
+
+.copy-clipboard-wrapper:hover {
+    color: var(--black-primary);
+}
+
+.copy-icon {
+    margin-right: 5px;
+}
+
 .poll-details-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    margin-top: 15px;
 }
 
 .question-header-details {
@@ -20,7 +36,7 @@ h3 {
 }
 
 .poll-description {
-    margin-top: 15px;
+    margin-top: 25px;
     max-width: 50vw;
 }
 

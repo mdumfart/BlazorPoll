@@ -43,7 +43,7 @@
             {
                 <AnswerComp Item="answer" OnDeleteAnswer="@(() => DeleteAnswer(answer))" />
             }
-            <button class="btn btn-primary btn-add-answer" @onclick="AddAnswer">
+            <button class="btn btn-primary btn-add-answer" @onclick="AddAnswer" disabled="@(CountAnswers >= 8)">
                 <div class="nav-button-content">
                     <span class="fa fa-plus new-poll-icon"></span>
                 </div>
@@ -69,6 +69,7 @@
 
     public Poll Poll { get; set; }
     private bool IsLoading { get; set; } = false;
+    private int CountAnswers { get; set; } = 2;
 
     protected override void OnInitialized()
     {
@@ -81,13 +82,14 @@
 
     public void DeleteAnswer(Answer answer)
     {
-        Console.WriteLine("remove");
         Poll.Answers.Remove(answer);
+        CountAnswers--;
     }
 
     private void AddAnswer()
     {
         Poll.Answers.Add(new Answer(Poll.Answers.Count));
+        CountAnswers++;
     }
 
     private async void ExecuteAddPoll()

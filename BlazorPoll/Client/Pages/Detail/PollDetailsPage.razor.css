@@ -23,6 +23,11 @@ h3 {
     margin-right: 5px;
 }
 
+.copied-text {
+    font-size: 15px;
+    color: var(--black-primary-light);
+}
+
 .poll-details-wrapper {
     display: flex;
     flex-direction: column;

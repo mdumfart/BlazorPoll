@@ -84,6 +84,19 @@
     {
         Poll.Answers.Remove(answer);
         CountAnswers--;
+
+        ReorderAnswers();
+    }
+
+    private void ReorderAnswers()
+    {
+        int i = 0;
+
+        foreach (var answer in Poll.Answers)
+        {
+            answer.Id = i;
+            i++;
+        }
     }
 
     private void AddAnswer()

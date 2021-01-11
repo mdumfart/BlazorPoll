@@ -53,6 +53,11 @@
     margin-right: 30px;
 }
 
+.btn-add-answer:disabled {
+    cursor: not-allowed;
+    background-color: var(--black-primary-light);
+}
+
 .button-question-create {
     display: flex;
     justify-content: center;

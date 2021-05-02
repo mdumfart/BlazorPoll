@@ -99,7 +99,7 @@ else
             guidFromParams = new Guid(Id);
             Poll = await GetPollByIdAsync(guidFromParams);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             // When Guid creation or http call fails
             Poll = null;

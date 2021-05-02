@@ -1,0 +1,9 @@
+﻿.input-login:not(:last-child) {
+    margin-bottom: 2vh;
+}
+
+.button-question-create {
+    margin-top: 2vh;
+    width: 10vw;
+    min-width: 100px;
+}

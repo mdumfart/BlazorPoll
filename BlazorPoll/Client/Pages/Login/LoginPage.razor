@@ -1,0 +1,35 @@
+﻿@page "/login"
+
+<CenteredBaseWrapper Header="User Login">
+    <ContentTemplate>
+        <EditForm Model="@User" OnValidSubmit="@Login">
+            <DataAnnotationsValidator />
+            <div class="input-group input-group-lg input-login input-validation-wrapper">
+                <InputText class="form-control input-validate input-question-create full-width" placeholder="Username" @bind-Value="User.UserName" />
+                <div class="validation-message-wrapper">
+                    <ValidationMessage For="@(() => User.UserName)" />
+                </div>
+            </div>
+            
+            <div class="input-group input-group-lg input-login input-validation-wrapper">
+                <InputText type="password" class="form-control input-validate input-question-create full-width" placeholder="Password" @bind-Value="User.Password" />
+                <div class="validation-message-wrapper">
+                    <ValidationMessage For="@(() => User.Password)" />
+                </div>
+            </div>
+        </EditForm>
+    </ContentTemplate>
+    <FooterTemplate>
+        <button type="submit" class="btn btn-primary nav-button button-question-create">Log me in!</button>
+    </FooterTemplate>
+</CenteredBaseWrapper>
+
+@code {
+    UserCredentials User { get; set; } = new UserCredentials();
+
+    public void Login()
+    {
+        Console.WriteLine(User.UserName);
+        Console.WriteLine(User.Password);
+    }
+}

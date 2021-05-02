@@ -1,0 +1,19 @@
+﻿<div class="content-centered-horizontal content-centered-vertical index-create-container">
+    <h1>@Header</h1>
+    <div class="input-group input-group-lg content-wrapper">
+        @ContentTemplate
+    </div>
+    @FooterTemplate
+</div>
+
+
+@code {
+    [Parameter]
+    public String Header { get; set; }
+
+    [Parameter]
+    public RenderFragment ContentTemplate { get; set; }
+
+    [Parameter]
+    public RenderFragment FooterTemplate { get; set; }
+}

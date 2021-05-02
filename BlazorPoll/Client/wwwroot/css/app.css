@@ -83,15 +83,11 @@ h1 {
     flex-direction: column;
 }
 
-.input-question-create-wrapper {
-    width: 50vw;
-}
-
-.input-question-create {
+.input-base {
     margin-top: 4vh;
 }
 
-.button-question-create {
+.button-base {
     margin-top: 2vh;
     width: 10vw;
     min-width: 100px;

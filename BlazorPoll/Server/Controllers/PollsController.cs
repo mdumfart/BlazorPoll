@@ -16,17 +16,18 @@ namespace BlazorPoll.Server.Controllers
     public class PollsController : ControllerBase
     {
         private readonly IPollsService _pollsService;
+        private readonly IAnswersService _answersService;
 
-        public PollsController(IPollsService pollsService)
+        public PollsController(IPollsService pollsService, IAnswersService answersService)
         {
             _pollsService = pollsService;
+            _answersService = answersService;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Poll>> GetPollById(Guid id)
         {
             var poll = await _pollsService.FindById(id);
-            Console.WriteLine(poll);
             if (poll == null)
                 return NotFound(new ProblemDetails()
                 {
@@ -40,7 +41,6 @@ namespace BlazorPoll.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePoll(Poll poll)
         {
-            Console.WriteLine("Create");
             Thread.Sleep(1000);
 
             poll = await _pollsService.Create(poll);
@@ -48,16 +48,28 @@ namespace BlazorPoll.Server.Controllers
             return CreatedAtAction(nameof(GetPollById), new {id = poll.Id}, poll);
         }
 
-        //[HttpPut("{pollId}/answer/single")]
-        //public async Task<IActionResult> AnswerPoll(Guid pollId, Answer answer)
-        //{
-        //    Thread.Sleep(1000);
+        [HttpPut("{pollId}/vote-single/{answerId}")]
+        public async Task<IActionResult> VoteOnSinglePoll(Guid pollId, int answerId)
+        {
+            var poll = await _pollsService.FindById(pollId);
 
-        //    var poll = InMemoryPolls.First(p => p.Id == pollId);
-            
-        //    poll.Answers.First(a => a.Id == answer.Id).Count++;
+            if (poll == null)
+                return NotFound(new ProblemDetails()
+                {
+                    Title = "Poll not found",
+                    Detail = $"Poll with id [{pollId}] not found"
+                });
 
-        //    return Ok();
-        //}
+            var answer = await _answersService.FindByPollIdAndAnswerId(pollId, answerId);
+
+            if (answer == null)
+                return NotFound(new ProblemDetails()
+                {
+                    Title = "Answer not found",
+                    Detail = $"Answer with id [{answerId}] not found"
+                });
+
+            return Ok(await _answersService.SubmitVote(answer));
+        }
     }
 }

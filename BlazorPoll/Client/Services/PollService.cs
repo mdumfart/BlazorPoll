@@ -33,18 +33,18 @@ namespace BlazorPoll.Client.Services
             return Guid.Empty;
         }
 
-        public async Task<Poll> GetPollById(Guid id)
+        public async Task<Poll> FindPollById(Guid id)
         { 
             return await httpClient.GetFromJsonAsync<Poll>($"/api/polls/{id}");
         }
 
         public async Task<bool> SendSinglePollAnswer(Poll poll, Answer answer, IPollHubService pollHubService)
         {
-            var resp = await httpClient.PutAsync($"/api/polls/{poll.Id}/answer/single", GetStringContent(answer));
+            var resp = await httpClient.PutAsync($"/api/polls/{poll.Id}/vote-single/{answer.Id}", GetStringContent(answer));
 
             if (resp.IsSuccessStatusCode)
             {
-                var updatedPoll = await GetPollById(poll.Id);
+                var updatedPoll = await FindPollById(poll.Id);
                 await pollHubService.Send(updatedPoll);
             }
             

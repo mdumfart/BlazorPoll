@@ -98,11 +98,9 @@ else
         {
             guidFromParams = new Guid(Id);
             Poll = await GetPollByIdAsync(guidFromParams);
-            Console.WriteLine(Poll.Question);
         }
         catch (Exception e)
         {
-            Console.WriteLine(e.ToString());
             // When Guid creation or http call fails
             Poll = null;
         }
@@ -119,7 +117,7 @@ else
 
     private async Task<Poll> GetPollByIdAsync(Guid id)
     {
-        return await PollService.GetPollById(id);
+        return await PollService.FindPollById(id);
     }
 
     public async ValueTask DisposeAsync()

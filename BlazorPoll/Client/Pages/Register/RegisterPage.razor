@@ -1,7 +1,7 @@
-﻿@page "/login"
+﻿@page "/register"
 
 <EditForm Model="@User" OnValidSubmit="@Login">
-    <CenteredBaseWrapper Header="User Login">
+    <CenteredBaseWrapper Header="Register a new account">
         <ContentTemplate>
             <DataAnnotationsValidator />
             <div class="input-group input-group-lg input-login input-validation-wrapper">
@@ -17,22 +17,23 @@
                     <ValidationMessage For="@(() => User.Password)" />
                 </div>
             </div>
-            <div class="d-flex justify-content-center full-width">
-                <NavLink href="../register">
-                    <span>You don't have an account?</span>
-                </NavLink>
-            </div>
 
+            <div class="input-group input-group-lg input-login input-validation-wrapper">
+                <InputText type="password" class="form-control input-validate input-question-create full-width" placeholder="Confirm Password" @bind-Value="User.PasswordConfirm" />
+                <div class="validation-message-wrapper">
+                    <ValidationMessage For="@(() => User.PasswordConfirm)" />
+                </div>
+            </div>
         </ContentTemplate>
         <FooterTemplate>
-            <button type="submit" class="btn btn-primary nav-button button-question-create">Log me in!</button>
+            <button type="submit" class="btn btn-primary nav-button button-question-create">Create account!</button>
         </FooterTemplate>
     </CenteredBaseWrapper>
 </EditForm>
 
 
 @code {
-    UserCredentials User { get; set; } = new UserCredentials();
+    UserDetails User { get; set; } = new UserDetails();
 
     public void Login()
     {

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using BlazorPoll.Server.Services;
 using BlazorPoll.Shared.Models;
 
 namespace BlazorPoll.Server.Controllers
@@ -14,21 +15,18 @@ namespace BlazorPoll.Server.Controllers
     [ApiController]
     public class PollsController : ControllerBase
     {
-        private static readonly List<Poll> InMemoryPolls = new List<Poll>();
+        private readonly IPollsService _pollsService;
 
-        public PollsController()
+        public PollsController(IPollsService pollsService)
         {
-            InMemoryPolls.Add(new Poll()
-            {
-                Question = "this is a question"
-            });
+            _pollsService = pollsService;
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Poll>> GetPollById(Guid id)
         {
-            var poll = InMemoryPolls.First(p => p.Id == id);
-
+            var poll = await _pollsService.FindById(id);
+            Console.WriteLine(poll);
             if (poll == null)
                 return NotFound(new ProblemDetails()
                 {
@@ -42,24 +40,24 @@ namespace BlazorPoll.Server.Controllers
         [HttpPost]
         public async Task<IActionResult> CreatePoll(Poll poll)
         {
-            Thread.Sleep(2000);
-            
-            poll.Id = Guid.NewGuid();
-            InMemoryPolls.Add(poll);
+            Console.WriteLine("Create");
+            Thread.Sleep(1000);
+
+            poll = await _pollsService.Create(poll);
 
             return CreatedAtAction(nameof(GetPollById), new {id = poll.Id}, poll);
         }
 
-        [HttpPut("{pollId}/answer/single")]
-        public async Task<IActionResult> AnswerPoll(Guid pollId, Answer answer)
-        {
-            Thread.Sleep(1000);
+        //[HttpPut("{pollId}/answer/single")]
+        //public async Task<IActionResult> AnswerPoll(Guid pollId, Answer answer)
+        //{
+        //    Thread.Sleep(1000);
 
-            var poll = InMemoryPolls.First(p => p.Id == pollId);
+        //    var poll = InMemoryPolls.First(p => p.Id == pollId);
             
-            poll.Answers.First(a => a.Id == answer.Id).Count++;
+        //    poll.Answers.First(a => a.Id == answer.Id).Count++;
 
-            return Ok();
-        }
+        //    return Ok();
+        //}
     }
 }

@@ -1,0 +1,14 @@
+﻿version: "3.3"
+
+services:
+  blazor-poll-database:
+    image: postgres:12
+    restart: always
+    ports:
+      - 5432:5432 
+    env_file:
+      - ./.env
+    volumes:
+      - blazor-poll-volume:/var/lib/postgresql/data
+volumes:
+  blazor-poll-volume:

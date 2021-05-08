@@ -34,8 +34,8 @@ namespace BlazorPoll.Client.Services
         }
 
         public async Task<Poll> GetPollById(Guid id)
-        {
-            return await httpClient.GetFromJsonAsync<Poll>($"/api/polls/{id.ToString()}");
+        { 
+            return await httpClient.GetFromJsonAsync<Poll>($"/api/polls/{id}");
         }
 
         public async Task<bool> SendSinglePollAnswer(Poll poll, Answer answer, IPollHubService pollHubService)

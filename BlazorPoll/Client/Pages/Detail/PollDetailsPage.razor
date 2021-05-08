@@ -98,26 +98,14 @@ else
         {
             guidFromParams = new Guid(Id);
             Poll = await GetPollByIdAsync(guidFromParams);
+            Console.WriteLine(Poll.Question);
         }
-        catch (Exception)
+        catch (Exception e)
         {
+            Console.WriteLine(e.ToString());
             // When Guid creation or http call fails
             Poll = null;
         }
-
-        //        Poll = new Poll()
-        //        {
-        //            Question = "Is this a poll?",
-        //            Answers = new List<Answer>()
-        //{
-        //                new Answer() {Id = 0, Count = 0, Content = "This is not an answer."},
-        //                new Answer() {Id = 1, Count = 0, Content = "This is another answer!"},
-        //                new Answer() {Id = 2, Count = 0, Content = "Is is not a poll."}
-        //            },
-        //            Description = "This is a very long description indeed please make it even a bit longer. Sometimes i feel the Bacc stress oh no"
-        //                + "This is a very long description indeed please make it even a bit longer. Sometimes i feel the Bacc stress oh no"
-        //                + "This is a very long description indeed please make it even a bit longer. Sometimes i feel the Bacc stress oh no"
-        //        };
 
         if (Poll != null)
         {

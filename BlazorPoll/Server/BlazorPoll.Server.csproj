@@ -6,11 +6,14 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="5.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.3">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
 	</ItemGroup>
 
@@ -26,7 +29,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Watch Remove="Controllers\UsersController.cs" />
+	  <Watch Remove="Dal\IPollsDao.cs" />
+	  <Watch Remove="Dal\IUsersDao.cs" />
+	  <Watch Remove="Dal\PollsDao.cs" />
+	  <Watch Remove="Dal\UsersDao.cs" />
 	  <Watch Remove="Data\ApplicationDBContext.cs" />
+	  <Watch Remove="Migrations\20210508174357_Inital.cs" />
+	  <Watch Remove="Migrations\20210508174357_Inital.Designer.cs" />
+	  <Watch Remove="Services\IPollsService.cs" />
+	  <Watch Remove="Services\IUserService.cs" />
+	  <Watch Remove="Services\PollsService.cs" />
+	  <Watch Remove="Services\UsersService.cs" />
 	</ItemGroup>
 
 </Project>

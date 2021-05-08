@@ -76,7 +76,7 @@
         Poll = new Poll
         {
             Question = Question,
-            Answers = new List<Answer> { new Answer(0), new Answer(1) }
+            Answers = new List<Answer> { new Answer(), new Answer() }
         };
     }
 
@@ -101,7 +101,7 @@
 
     private void AddAnswer()
     {
-        Poll.Answers.Add(new Answer(Poll.Answers.Count));
+        Poll.Answers.Add(new Answer());
         CountAnswers++;
     }
 

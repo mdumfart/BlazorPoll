@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -6,9 +7,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using BlazorPoll.Server.Dal;
 using BlazorPoll.Server.Data;
 using BlazorPoll.Server.Hubs;
+using BlazorPoll.Server.Services;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace BlazorPoll.Server
 {
@@ -26,17 +30,33 @@ namespace BlazorPoll.Server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSignalR();
-            services.AddControllersWithViews();
+
+            services.AddControllersWithViews().AddNewtonsoftJson(options =>
+            {
+                options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            });
+
             services.AddRazorPages();
 
+            
             services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
                     new[] {"application/octet-stream"});
             });
 
+            
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            {
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
+                        .EnableSensitiveDataLogging();
+            });
+
+            services.AddScoped<IUserService, UsersService>();
+            services.AddScoped<IPollsService, PollsService>();
+
+            services.AddScoped<IUsersDao, UsersDao>();
+            services.AddScoped<IPollsDao, PollsDao>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

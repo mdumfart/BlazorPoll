@@ -12,8 +12,14 @@ namespace BlazorPoll.Server.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
         }
+        
         public DbSet<User> Users { get; set; }
         public DbSet<Poll> Polls { get; set; }
         public DbSet<Answer> Answers { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Poll>().HasMany<Answer>(p => p.Answers).WithOne(a => a.Poll);
+        }
     }
 }

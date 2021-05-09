@@ -1,12 +1,20 @@
-﻿@if (IsMultipleChoice)
+﻿@using BlazorPoll.Shared.Dtos
+@if (IsMultipleChoice)
 {
-    <div>multi</div>
+    <label class="form-check answer-wrapper">
+        <input type="checkbox" class="form-check-input" name="radioAnswerGroup" id="@GetRadioIdString()" value="@Answer"
+               @onchange="@(() => OnSelectionChangedMultiple.InvokeAsync(Answer))"
+               checked="@(Answer.Id == 0)" />
+        <label class="form-check-label answer-label" for="@GetRadioIdString()">
+            @Answer.Content
+        </label>
+    </label>
 }
 else
 {
     <label class="form-check answer-wrapper">
         <input class="form-check-input" type="radio" name="radioAnswerGroup" id="@GetRadioIdString()" value="@Answer"
-               @onchange="@(() => OnSelectionChanged.InvokeAsync(Answer))"
+               @onchange="@(() => OnSelectionChangedSingle.InvokeAsync(Answer))"
                checked="@(Answer.Id == 0)">
         <label class="form-check-label answer-label" for="@GetRadioIdString()">
             @Answer.Content
@@ -20,12 +28,14 @@ else
     [Parameter]
     public Answer Answer { get; set; }
     [Parameter]
-    public EventCallback<Answer> OnSelectionChanged { get; set; }
+    public EventCallback<Answer> OnSelectionChangedSingle { get; set; }
+    [Parameter]
+    public EventCallback<Answer> OnSelectionChangedMultiple { get; set; }
 
     protected override Task OnInitializedAsync()
     {
         if (Answer.Id == 0)
-            OnSelectionChanged.InvokeAsync(Answer);
+            OnSelectionChangedSingle.InvokeAsync(Answer);
 
         return Task.CompletedTask;
     }

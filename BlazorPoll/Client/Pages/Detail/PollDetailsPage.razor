@@ -1,5 +1,6 @@
 ﻿@page "/poll/{id}"
 @using BlazorPoll.Client.Services
+@using BlazorPoll.Shared.Dtos
 @using Microsoft.AspNetCore.SignalR.Client
 @inject IPollService PollService;
 @inject NavigationManager NavigationManager
@@ -43,9 +44,19 @@ else
                 <div class="answers-content-wrapper">
                     @foreach (var answer in Poll.Answers)
                     {
-                        <VoteAnswer IsMultipleChoice="true" Answer="@answer"></VoteAnswer>
+                        <VoteAnswer IsMultipleChoice="true" OnSelectionChangedMultiple="@OnMultipleSelectionChange" Answer="@answer"></VoteAnswer>
                     }
                 </div>
+                <button class="btn btn-primary button-send-answer" type="submit" @onclick="SubmitAnswer">
+                    @if (IsLoading)
+                    {
+                        <Bounce Size="20px" Color="#fff" class="@(IsLoading ? "loading-visible" : "loading-invisible")" />
+                    }
+                    else
+                    {
+                        <span class="@(!IsLoading ? "loading-visible" : "loading-invisible")">Submit answer</span>
+                    }
+                </button>
             }
             else
             {
@@ -54,7 +65,7 @@ else
                     <div class="answers-content-wrapper">
                         @foreach (var answer in Poll.Answers)
                         {
-                            <VoteAnswer IsMultipleChoice="false" Answer="@answer" OnSelectionChanged="@(() => OnRadioSelectionChanged(answer))"></VoteAnswer>
+                            <VoteAnswer IsMultipleChoice="false" Answer="@answer" OnSelectionChangedSingle="@(() => OnSingleSelectionChanged(answer))"></VoteAnswer>
                         }
                     </div>
                     <button class="btn btn-primary button-send-answer" type="submit" @onclick="SubmitAnswer">
@@ -87,7 +98,8 @@ else
     private VisualizePoll VisualizePollChild;
     private bool IsLoading { get; set; } = false;
     private IPollHubService _pollHubService;
-    private Answer SelectedRadioAnswer { get; set; }
+    private Answer SelectedSingleAnswer { get; set; }
+    private List<Answer> SelectedMultipleAnswers { get; set; } = new List<Answer>();
 
 
     protected override async Task OnInitializedAsync()
@@ -129,15 +141,37 @@ else
     /// Set selected item for single choice polls
     /// </summary>
     /// <param name="answer">The answer to set to currently selected</param>
-    public void OnRadioSelectionChanged(Answer answer)
+    public void OnSingleSelectionChanged(Answer answer)
     {
-        SelectedRadioAnswer = answer;
+        SelectedSingleAnswer = answer;
+    }
+
+    public void OnMultipleSelectionChange(Answer answer)
+    {
+        if (SelectedMultipleAnswers.Contains(answer))
+        {
+            SelectedMultipleAnswers.Remove(answer);
+        }
+        else
+        {
+            SelectedMultipleAnswers.Add(answer);
+        }
     }
 
     private async Task SubmitAnswer()
     {
         IsLoading = true;
-        var result = await PollService.SendSinglePollAnswer(Poll, SelectedRadioAnswer, _pollHubService);
+        bool result = false;
+
+        if (Poll.IsMultipleChoice)
+        {
+            result = await PollService.SendMultiplePollAnswers(Poll, SelectedMultipleAnswers, _pollHubService);
+        }
+        else
+        {
+            result = await PollService.SendSinglePollAnswer(Poll, SelectedSingleAnswer, _pollHubService);
+        }
+
         IsLoading = false;
 
         if (result)

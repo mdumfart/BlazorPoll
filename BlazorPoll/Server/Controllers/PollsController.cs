@@ -71,5 +71,35 @@ namespace BlazorPoll.Server.Controllers
 
             return Ok(await _answersService.SubmitVote(answer));
         }
+
+        [HttpPut("{pollId}/vote-multiple")]
+        public async Task<IActionResult> VoteOnMultiplePoll(Guid pollId, [FromBody] int[] answerIds)
+        {
+            var poll = await _pollsService.FindById(pollId);
+
+            if (poll == null)
+                return NotFound(new ProblemDetails()
+                {
+                    Title = "Poll not found",
+                    Detail = $"Poll with id [{pollId}] not found"
+                });
+
+            foreach (var answerId in answerIds)
+            {
+                var answer = await _answersService.FindByPollIdAndAnswerId(pollId, answerId);
+
+                if (answer == null)
+                    return NotFound(new ProblemDetails()
+                    {
+                        Title = "Answer not found",
+                        Detail = $"Answer with id [{answerId}] not found"
+                    });
+
+                await _answersService.SubmitVote(answer);
+            }
+
+
+            return Ok(poll);
+        }
     }
 }

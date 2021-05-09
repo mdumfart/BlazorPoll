@@ -51,11 +51,38 @@ namespace BlazorPoll.Client.Services
             return resp.IsSuccessStatusCode;
         }
 
+        public async Task<bool> SendMultiplePollAnswers(Poll poll, List<Answer> answers, IPollHubService pollHubService)
+        {
+            var ids = GetIdArrayFromAnswerList(answers);
+            
+            var resp = await httpClient.PutAsync($"/api/polls/{poll.Id}/vote-multiple", GetStringContent(ids));
+
+            if (resp.IsSuccessStatusCode)
+            {
+                var updatedPoll = await FindPollById(poll.Id);
+                await pollHubService.Send(updatedPoll);
+            }
+
+            return resp.IsSuccessStatusCode;
+        }
+
         private StringContent GetStringContent(object o)
         {
             var json = JsonConvert.SerializeObject(o);
             
             return new StringContent(json, Encoding.UTF8, "application/json");
+        }
+
+        private int[] GetIdArrayFromAnswerList(List<Answer> answers)
+        {
+            var ids = new int[answers.Count];
+
+            for (int i = 0; i < answers.Count; i++)
+            {
+                ids[i] = answers[i].Id;
+            }
+
+            return ids;
         }
     }
 }

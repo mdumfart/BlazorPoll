@@ -1,7 +1,7 @@
 ﻿
 <div class="answer-wrapper">
     <div class="answer-header">
-        Answer @(Item.Id + 1)
+        Answer @(CountAnswer + 1)
     </div>
     <div class="answer-content">
         <div class="input-group input-group-lg input-create-poll input-validation-wrapper">
@@ -21,6 +21,8 @@
 @code {
     [Parameter]
     public Answer Item { get; set; }
+    [Parameter]
+    public int CountAnswer { get; set; }
     [Parameter]
     public EventCallback<Answer> OnDeleteAnswer { get; set; }
 

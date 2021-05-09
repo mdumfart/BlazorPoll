@@ -11,5 +11,7 @@ namespace BlazorPoll.Client.Services
         Task<Guid> AddPoll(Poll poll);
         Task<Poll> FindPollById(Guid id);
         Task<bool> SendSinglePollAnswer(Poll poll, Answer answer, IPollHubService pollHubService);
+        
+        Task<bool> SendMultiplePollAnswers(Poll poll, List<Answer> answers, IPollHubService pollHubService);
     }
 }

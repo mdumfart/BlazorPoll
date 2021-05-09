@@ -21,6 +21,8 @@ namespace BlazorPoll.Client
             builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddSingleton<IPollService, PollService>(_ => 
                 new PollService(new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) }));
+
+            builder.Services.AddApiAuthorization();
             
             await builder.Build().RunAsync();
         }

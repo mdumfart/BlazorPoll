@@ -1,4 +1,8 @@
-﻿<div class="navbar-wrapper">
+﻿@using BlazorPoll.Client.Services
+@inject IUserService UserService
+@inject NavigationManager NavigationManager
+
+<div class="navbar-wrapper">
     <a href="/" class="navbar-icon-wrapper">
         <span class="fa fa-poll navbar-icon"></span>
         <div class="navbar-title">BlazorPoll</div>
@@ -12,12 +16,24 @@
                 </div>
             </button>
         </NavLink>
-        <NavLink href="login">
-            <button class="btn btn-primary nav-button">Login</button>
-        </NavLink>
+        <AuthorizeView>
+            <Authorized>
+                <button class="btn btn-primary nav-button" @onclick="Logout">Logout</button>
+            </Authorized>
+            <NotAuthorized>
+                <NavLink href="Login">
+                    <button class="btn btn-primary nav-button">Login</button>
+                </NavLink>
+            </NotAuthorized>
+        </AuthorizeView>
     </div>
 </div>
 
 @code {
-
+    public async Task Logout()
+    {
+        await UserService.Logout();
+        NavigationManager.NavigateTo("/", true);
+        StateHasChanged();
+    }
 }

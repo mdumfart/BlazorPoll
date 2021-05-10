@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BlazorPoll.Shared.Models
 {
-    public class UserDetails
+    public class UserDetailsDto
     {
         [Required(ErrorMessage = "Username is required")]
         [MinLength(3, ErrorMessage = "Username must have 3 characters at least")]

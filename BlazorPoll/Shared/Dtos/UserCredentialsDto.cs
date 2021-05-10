@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BlazorPoll.Shared.Models
 {
-    public class UserCredentials
+    public class UserCredentialsDto
     {
         [Required(ErrorMessage = "Username is required")]
         public string UserName { get; set; }

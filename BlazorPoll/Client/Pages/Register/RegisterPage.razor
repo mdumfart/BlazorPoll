@@ -1,4 +1,6 @@
 ﻿@page "/register"
+@using BlazorPoll.Client.Services
+@inject IUserService UserService
 
 <EditForm Model="@User" OnValidSubmit="@Login">
     <CenteredBaseWrapper Header="Register a new account">
@@ -31,13 +33,18 @@
     </CenteredBaseWrapper>
 </EditForm>
 
-
 @code {
-    UserDetails User { get; set; } = new UserDetails();
+    UserDetailsDto User { get; } = new UserDetailsDto();
 
-    public void Login()
+    public async void Login()
     {
-        Console.WriteLine(User.UserName);
-        Console.WriteLine(User.Password);
+        var userCredentials = new UserCredentialsDto() { UserName = User.UserName, Password = User.Password };
+
+        var createdUser = await UserService.Register(userCredentials);
+
+        if (createdUser != null)
+        {
+            Console.WriteLine("Success");
+        }
     }
 }

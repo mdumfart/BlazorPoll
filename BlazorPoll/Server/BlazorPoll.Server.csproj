@@ -5,6 +5,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.5" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.3" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.3" />
@@ -29,6 +30,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Watch Remove="Controllers\ErrorController.cs" />
 	  <Watch Remove="Controllers\UsersController.cs" />
 	  <Watch Remove="Dal\AnswerDao.cs" />
 	  <Watch Remove="Dal\IAnswerDao.cs" />
@@ -39,6 +41,7 @@
 	  <Watch Remove="Data\ApplicationDBContext.cs" />
 	  <Watch Remove="Migrations\20210508174357_Inital.cs" />
 	  <Watch Remove="Migrations\20210508174357_Inital.Designer.cs" />
+	  <Watch Remove="Models\ErrorResponse.cs" />
 	  <Watch Remove="Services\AnswersService.cs" />
 	  <Watch Remove="Services\IAnswersService.cs" />
 	  <Watch Remove="Services\IPollsService.cs" />

@@ -11,6 +11,11 @@ using BlazorPoll.Server.Dal;
 using BlazorPoll.Server.Data;
 using BlazorPoll.Server.Hubs;
 using BlazorPoll.Server.Services;
+using BlazorPoll.Shared.Exceptions;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -38,6 +43,9 @@ namespace BlazorPoll.Server
 
             services.AddRazorPages();
 
+            services.AddAuthentication(options =>
+                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme
+            ).AddCookie();
             
             services.AddResponseCompression(opts =>
             {
@@ -68,13 +76,10 @@ namespace BlazorPoll.Server
             
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
             }
             else
             {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -82,7 +87,12 @@ namespace BlazorPoll.Server
             app.UseBlazorFrameworkFiles();
             app.UseStaticFiles();
 
+            // TODO
+            app.UseExceptionHandler("/r");
+
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

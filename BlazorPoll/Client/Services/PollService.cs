@@ -13,16 +13,16 @@ namespace BlazorPoll.Client.Services
     public class PollService : IPollService
     {
         private const string ApiUrl = "http://localhost:64418";
-        private readonly HttpClient httpClient;
+        private readonly HttpClient _httpClient;
         
         public PollService(HttpClient httpClient)
         {
-            this.httpClient = httpClient;
+            _httpClient = httpClient;
         }
         
         public async Task<Guid> AddPoll(Poll poll)
         {
-            var resp = await httpClient.PostAsync("api/polls", GetStringContent(poll));
+            var resp = await _httpClient.PostAsync("api/polls", GetStringContent(poll));
 
             if (resp.IsSuccessStatusCode)
             {
@@ -35,12 +35,12 @@ namespace BlazorPoll.Client.Services
 
         public async Task<Poll> FindPollById(Guid id)
         { 
-            return await httpClient.GetFromJsonAsync<Poll>($"/api/polls/{id}");
+            return await _httpClient.GetFromJsonAsync<Poll>($"/api/polls/{id}");
         }
 
         public async Task<bool> SendSinglePollAnswer(Poll poll, Answer answer, IPollHubService pollHubService)
         {
-            var resp = await httpClient.PutAsync($"/api/polls/{poll.Id}/vote-single/{answer.Id}", GetStringContent(answer));
+            var resp = await _httpClient.PutAsync($"/api/polls/{poll.Id}/vote-single/{answer.Id}", GetStringContent(answer));
 
             if (resp.IsSuccessStatusCode)
             {
@@ -55,7 +55,7 @@ namespace BlazorPoll.Client.Services
         {
             var ids = GetIdArrayFromAnswerList(answers);
             
-            var resp = await httpClient.PutAsync($"/api/polls/{poll.Id}/vote-multiple", GetStringContent(ids));
+            var resp = await _httpClient.PutAsync($"/api/polls/{poll.Id}/vote-multiple", GetStringContent(ids));
 
             if (resp.IsSuccessStatusCode)
             {

@@ -1,4 +1,7 @@
 ﻿@page "/login"
+@using BlazorPoll.Client.Services
+@inject IUserService UserService
+@inject NavigationManager NavigationManager
 
 <EditForm Model="@User" OnValidSubmit="@Login">
     <CenteredBaseWrapper Header="User Login">
@@ -32,11 +35,15 @@
 
 
 @code {
-    UserCredentials User { get; set; } = new UserCredentials();
+    UserCredentialsDto User { get; set; } = new UserCredentialsDto();
 
-    public void Login()
+    public async void Login()
     {
-        Console.WriteLine(User.UserName);
-        Console.WriteLine(User.Password);
+        var loggedInUser = await UserService.Login(User);
+
+        if (loggedInUser != null)
+        {
+            NavigationManager.NavigateTo("/profile", true);
+        }
     }
 }

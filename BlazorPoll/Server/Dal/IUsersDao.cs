@@ -13,5 +13,6 @@ namespace BlazorPoll.Server.Dal
         public Task<User> Update(User user);
         public Task Delete(User user);
         public Task<List<User>> FindAll();
+        public Task<User> FindByUserName(string username);
     }
 }

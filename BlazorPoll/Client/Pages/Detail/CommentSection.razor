@@ -1,0 +1,32 @@
+﻿<section class="comment-section-wrapper">
+    <EditForm Model="@Comment" OnValidSubmit="SubmitComment">
+        <DataAnnotationsValidator />
+        <div class="input-group input-group-lg input-validation-wrapper create-comment-input-wrapper">
+            <InputText class="form-control input-validate full-width" placeholder="Write a comment..." @bind-Value="Comment.Content" />
+            <div class="validation-message-wrapper">
+                <ValidationMessage For="@(() => Comment.Content)" />
+            </div>
+        </div>
+        <button class="btn btn-primary button-send-comment">
+            @if (IsLoading)
+            {
+                <Bounce Size="20px" Color="#fff" class="@(IsLoading ? "loading-visible" : "loading-invisible")"/>
+            }
+            else
+            {
+                <span class="@(!IsLoading ? "loading-visible" : "loading-invisible")">Submit comment</span>
+            }
+        </button>
+    </EditForm>
+</section>
+
+@code {
+    [Parameter]
+    public Poll Poll { get; set; }
+    public Comment Comment { get; set; } = new Comment();
+    private bool IsLoading { get; set; } = false;
+
+    private async Task SubmitComment()
+    {
+    }
+}

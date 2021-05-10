@@ -11,13 +11,21 @@
         <NavLink href="create">
             <button class="btn btn-primary nav-button">
                 <div class="nav-button-content">
-                    <span class="fa fa-plus new-poll-icon"></span>
+                    <span class="fa fa-plus button-icon"></span>
                     <div>New poll</div>
                 </div>
             </button>
         </NavLink>
         <AuthorizeView>
             <Authorized>
+                <NavLink href="profile">
+                    <button class="btn btn-primary nav-button">
+                        <div class="nav-button-content">
+                            <span class="fa fa-user button-icon"></span>
+                            <div>My profile</div>
+                        </div>
+                    </button>
+                </NavLink>
                 <button class="btn btn-primary nav-button" @onclick="Logout">Logout</button>
             </Authorized>
             <NotAuthorized>

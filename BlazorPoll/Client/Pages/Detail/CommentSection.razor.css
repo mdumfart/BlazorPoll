@@ -1,0 +1,18 @@
+﻿.comment-section-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50vw;
+    margin-top: 15px;
+    margin-bottom: 5vh;
+}
+
+.create-comment-input-wrapper {
+    margin-bottom: 7px;
+}
+
+.button-send-comment {
+    width: 10vw;
+    min-width: 200px;
+}

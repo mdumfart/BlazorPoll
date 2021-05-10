@@ -6,11 +6,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 
 namespace BlazorPoll.Shared.Models
 {
-    public class User : IdentityUser
+    public class User
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
@@ -26,5 +25,6 @@ namespace BlazorPoll.Shared.Models
         public string Password { get; set; }
         
         public DateTime CreatedAt { get; set; }
+        
     }
 }

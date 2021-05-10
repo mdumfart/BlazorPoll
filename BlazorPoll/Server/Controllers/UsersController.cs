@@ -10,10 +10,5 @@ namespace BlazorPoll.Server.Controllers
     [Controller]
     public class UsersController : ControllerBase
     {
-        [HttpPost("register")]
-        public async Task<IActionResult> Register()
-        {
-            return Ok();
-        }
     }
 }

@@ -11,8 +11,6 @@ using BlazorPoll.Server.Dal;
 using BlazorPoll.Server.Data;
 using BlazorPoll.Server.Hubs;
 using BlazorPoll.Server.Services;
-using BlazorPoll.Shared.Models;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -61,13 +59,6 @@ namespace BlazorPoll.Server
             services.AddScoped<IUsersDao, UsersDao>();
             services.AddScoped<IPollsDao, PollsDao>();
             services.AddScoped<IAnswerDao, AnswerDao>();
-
-            services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            services.AddIdentityServer().AddApiAuthorization<User, ApplicationDbContext>();
-
-            services.AddAuthentication().AddIdentityServerJwt();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,10 +83,6 @@ namespace BlazorPoll.Server
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseIdentityServer();
-            app.UseAuthentication();
-            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

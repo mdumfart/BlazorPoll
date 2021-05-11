@@ -1,6 +1,7 @@
 ﻿@using BlazorPoll.Client.Services
 @inject ICommentsService CommentsService
-@inject IUserService UserService;
+@inject IUserService UserService
+@inject IJSRuntime JS
 
 <section class="comment-section-wrapper">
     @if (Poll.Comments != null)
@@ -54,6 +55,8 @@
             {
                 Comment.Content = String.Empty;
                 Poll.Comments.Add(createdComment);
+
+                await JS.InvokeAsync<string>("scrollToBottom");
             }
         }
     }

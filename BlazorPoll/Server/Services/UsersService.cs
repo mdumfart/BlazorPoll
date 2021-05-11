@@ -33,7 +33,8 @@ namespace BlazorPoll.Server.Services
             var user = new User
             {
                 Username = userCredentials.UserName,
-                Password = _hasher.HashPassword(userCredentials, userCredentials.Password)
+                Password = _hasher.HashPassword(userCredentials, userCredentials.Password),
+                CreatedAt = DateTime.Now
             };
 
             return await _userDao.Create(user);
@@ -63,6 +64,11 @@ namespace BlazorPoll.Server.Services
         public async Task<List<User>> FindAll()
         {
             return await _userDao.FindAll();
+        }
+
+        public async Task<User> FindByUserName(string userName)
+        {
+            return await _userDao.FindByUserName(userName);
         }
 
         private PasswordVerificationResult VerifyUser(UserCredentialsDto providedCredentials, User storedUser)

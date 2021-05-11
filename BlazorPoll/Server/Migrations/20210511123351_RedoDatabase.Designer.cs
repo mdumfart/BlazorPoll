@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BlazorPoll.Server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20210508174357_Inital")]
-    partial class Inital
+    [Migration("20210511123351_RedoDatabase")]
+    partial class RedoDatabase
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -56,6 +56,7 @@ namespace BlazorPoll.Server.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
@@ -70,7 +71,7 @@ namespace BlazorPoll.Server.Migrations
 
                     b.HasIndex("PollId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("BlazorPoll.Shared.Models.Poll", b =>

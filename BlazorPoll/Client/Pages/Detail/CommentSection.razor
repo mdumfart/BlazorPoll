@@ -1,4 +1,8 @@
-﻿<section class="comment-section-wrapper">
+﻿@using BlazorPoll.Client.Services
+@inject ICommentsService CommentsService
+@inject IUserService UserService;
+
+<section class="comment-section-wrapper">
     <EditForm Model="@Comment" OnValidSubmit="SubmitComment">
         <DataAnnotationsValidator />
         <div class="input-group input-group-lg input-validation-wrapper create-comment-input-wrapper">
@@ -10,7 +14,7 @@
         <button class="btn btn-primary button-send-comment">
             @if (IsLoading)
             {
-                <Bounce Size="20px" Color="#fff" class="@(IsLoading ? "loading-visible" : "loading-invisible")"/>
+                <Bounce Size="20px" Color="#fff" class="@(IsLoading ? "loading-visible" : "loading-invisible")" />
             }
             else
             {
@@ -28,5 +32,22 @@
 
     private async Task SubmitComment()
     {
+        var authenticatedUser = UserService.GetAuthenticatedUser();
+
+        if (authenticatedUser != null)
+        {
+            Console.WriteLine(authenticatedUser.Username);
+            Console.WriteLine(authenticatedUser.Id);
+
+            Comment.Author = authenticatedUser;
+            Comment.Poll = Poll;
+
+            var createdComment = await CommentsService.Create(Comment);
+
+            if (createdComment != null)
+            {
+                Comment.Content = String.Empty;
+            }
+        }
     }
 }

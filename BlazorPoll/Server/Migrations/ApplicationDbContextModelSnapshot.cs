@@ -54,6 +54,7 @@ namespace BlazorPoll.Server.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<string>("Content")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
@@ -68,7 +69,7 @@ namespace BlazorPoll.Server.Migrations
 
                     b.HasIndex("PollId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("BlazorPoll.Shared.Models.Poll", b =>

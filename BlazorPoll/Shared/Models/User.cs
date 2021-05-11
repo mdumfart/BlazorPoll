@@ -25,6 +25,5 @@ namespace BlazorPoll.Shared.Models
         public string Password { get; set; }
         
         public DateTime CreatedAt { get; set; }
-        
     }
 }

@@ -63,10 +63,12 @@ namespace BlazorPoll.Server
             services.AddScoped<IUserService, UsersService>();
             services.AddScoped<IPollsService, PollsService>();
             services.AddScoped<IAnswersService, AnswersService>();
+            services.AddScoped<ICommentsService, CommentsService>();
 
             services.AddScoped<IUsersDao, UsersDao>();
             services.AddScoped<IPollsDao, PollsDao>();
             services.AddScoped<IAnswerDao, AnswerDao>();
+            services.AddScoped<ICommentsDao, CommentsDao>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

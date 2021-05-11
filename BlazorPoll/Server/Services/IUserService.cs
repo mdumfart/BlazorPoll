@@ -12,5 +12,6 @@ namespace BlazorPoll.Server.Services
         public Task<User> Register(UserCredentialsDto userCredentials);
         public Task<User> Login(UserCredentialsDto userCredentials, HttpContext context);
         public Task<List<User>> FindAll();
+        public Task<User> FindByUserName(string userName);
     }
 }

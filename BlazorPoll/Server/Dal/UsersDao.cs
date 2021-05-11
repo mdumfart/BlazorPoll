@@ -42,9 +42,9 @@ namespace BlazorPoll.Server.Dal
             return _context.Users.ToList();
         }
 
-        public async Task<User> FindByUserName(string username)
+        public async Task<User> FindByUserName(string userName)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+            return await _context.Users.FirstOrDefaultAsync(u => u.Username == userName);
         }
     }
 }

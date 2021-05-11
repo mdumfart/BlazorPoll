@@ -2,20 +2,29 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using BlazorPoll.Shared.Models;
+using Microsoft.AspNetCore.Components.Authorization;
 using Newtonsoft.Json;
 
 namespace BlazorPoll.Client.Services
 {
     public class UserService : IUserService
     {
+        private User _authenticatedUser;
         private readonly HttpClient _httpClient;
 
-        public UserService(HttpClient httpClient)
+        public UserService(HttpClient httpClient, AuthenticationStateProvider authenticationState)
         {
             _httpClient = httpClient;
+
+            authenticationState.AuthenticationStateChanged +=
+                (Task<AuthenticationState> authenticationStateTask) => ChangeAuthenticatedUser();
+            
+            ChangeAuthenticatedUser();
         }
 
         public async Task<User> Register(UserCredentialsDto userCredentials)
@@ -49,11 +58,23 @@ namespace BlazorPoll.Client.Services
             var resp = await _httpClient.PostAsync("api/users/logout", null);
         }
 
+        public User GetAuthenticatedUser()
+        {
+            return _authenticatedUser;
+        }
+
         private StringContent GetStringContent(object o)
         {
             var json = JsonConvert.SerializeObject(o);
 
             return new StringContent(json, Encoding.UTF8, "application/json");
+        }
+        
+        private async void ChangeAuthenticatedUser()
+        {
+            var user = await _httpClient.GetFromJsonAsync<User>("api/users/current");
+
+            _authenticatedUser = user?.Username != null ? user : null;
         }
     }
 }

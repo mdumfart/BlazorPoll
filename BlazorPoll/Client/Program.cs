@@ -22,12 +22,12 @@ namespace BlazorPoll.Client
 
             builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             
-            builder.Services.AddSingleton<IPollService, PollService>(_ => 
-                new PollService(new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) }));
+            builder.Services.AddScoped<IPollService, PollService>();
             
-            builder.Services.AddSingleton<IUserService, UserService>(_ =>
-                new UserService(new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) }));
-            
+            builder.Services.AddScoped<IUserService, UserService>();
+
+            builder.Services.AddScoped<ICommentsService, CommentsService>();
+
             builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
 

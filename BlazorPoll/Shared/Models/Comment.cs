@@ -14,7 +14,7 @@ namespace BlazorPoll.Shared.Models
         [Key]
         public Guid Id { get; set; }
         
-        
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Provide a comment")]
         public string Content { get; set; }
         
         public DateTime CreatedAt { get; set; }
@@ -22,6 +22,5 @@ namespace BlazorPoll.Shared.Models
         public virtual User Author { get; set; }
 
         public virtual Poll Poll { get; set; }
-
     }
 }

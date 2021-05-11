@@ -17,8 +17,9 @@ namespace BlazorPoll.Server.Controllers
     {
         private readonly IPollsService _pollsService;
         private readonly IAnswersService _answersService;
+        private readonly ICommentsService _commentsService;
 
-        public PollsController(IPollsService pollsService, IAnswersService answersService)
+        public PollsController(IPollsService pollsService, IAnswersService answersService, ICommentsService commentsService)
         {
             _pollsService = pollsService;
             _answersService = answersService;
@@ -101,5 +102,21 @@ namespace BlazorPoll.Server.Controllers
 
             return Ok(poll);
         }
+
+        [HttpGet("{pollId}/comments")]
+        public async Task<IActionResult> GetCommentsByPoll(Guid pollId)
+        {
+            var poll = await _pollsService.FindById(pollId);
+
+            if (poll == null)
+                return NotFound(new ProblemDetails()
+                {
+                    Title = "Poll not found",
+                    Detail = $"Poll with id [{pollId}] not found"
+                });
+
+            return Ok(await _commentsService.FindByPollId(pollId));
+        }
+
     }
 }

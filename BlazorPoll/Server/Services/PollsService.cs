@@ -18,6 +18,7 @@ namespace BlazorPoll.Server.Services
 
         public async Task<Poll> Create(Poll poll)
         {
+            poll.CreatedAt = DateTime.Now;
             return await _pollsDao.Create(poll);
         }
 

@@ -30,20 +30,25 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Watch Remove="Controllers\CommentsController.cs" />
 	  <Watch Remove="Controllers\ErrorController.cs" />
 	  <Watch Remove="Controllers\UsersController.cs" />
 	  <Watch Remove="Dal\AnswerDao.cs" />
+	  <Watch Remove="Dal\CommentsDao.cs" />
 	  <Watch Remove="Dal\IAnswerDao.cs" />
+	  <Watch Remove="Dal\ICommentsDao.cs" />
 	  <Watch Remove="Dal\IPollsDao.cs" />
 	  <Watch Remove="Dal\IUsersDao.cs" />
 	  <Watch Remove="Dal\PollsDao.cs" />
 	  <Watch Remove="Dal\UsersDao.cs" />
 	  <Watch Remove="Data\ApplicationDBContext.cs" />
-	  <Watch Remove="Migrations\20210508174357_Inital.cs" />
-	  <Watch Remove="Migrations\20210508174357_Inital.Designer.cs" />
+	  <Watch Remove="Migrations\20210511123351_RedoDatabase.cs" />
+	  <Watch Remove="Migrations\20210511123351_RedoDatabase.Designer.cs" />
 	  <Watch Remove="Models\ErrorResponse.cs" />
 	  <Watch Remove="Services\AnswersService.cs" />
+	  <Watch Remove="Services\CommentsService.cs" />
 	  <Watch Remove="Services\IAnswersService.cs" />
+	  <Watch Remove="Services\ICommentsService.cs" />
 	  <Watch Remove="Services\IPollsService.cs" />
 	  <Watch Remove="Services\IUserService.cs" />
 	  <Watch Remove="Services\PollsService.cs" />

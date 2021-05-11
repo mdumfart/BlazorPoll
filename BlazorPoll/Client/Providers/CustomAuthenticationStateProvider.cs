@@ -18,11 +18,10 @@ namespace BlazorPoll.Client.Providers
         {
             _httpClient = httpClient;
         }
-        
+
         public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
             User currentUser = await _httpClient.GetFromJsonAsync<User>("api/users/current");
-            Console.WriteLine(currentUser);
 
             if (currentUser?.Username != null)
             {

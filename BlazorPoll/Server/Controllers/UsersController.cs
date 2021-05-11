@@ -13,10 +13,12 @@ namespace BlazorPoll.Server.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly ICommentsService _commentsService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, ICommentsService commentsService)
         {
             _userService = userService;
+            _commentsService = commentsService;
         }
 
         [HttpPost("register")]
@@ -36,9 +38,14 @@ namespace BlazorPoll.Server.Controllers
         {
             User currentUser = new User();
 
-            if (User.Identity.IsAuthenticated)
+            if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                currentUser.Username = User.FindFirstValue(ClaimTypes.Name);
+                var username = User.FindFirstValue(ClaimTypes.Name);
+
+                if (username != null)
+                {
+                    currentUser = await _userService.FindByUserName(username);
+                }
             }
 
             return await Task.FromResult(currentUser);
@@ -49,6 +56,21 @@ namespace BlazorPoll.Server.Controllers
         {
             await HttpContext.SignOutAsync();
             return Ok();
+        }
+
+        [HttpGet("{username}/comments")]
+        public async Task<IActionResult> GetCommentsByUser(string username)
+        {
+            var user = await _userService.FindByUserName(username);
+
+            if (user == null)
+                return NotFound(new ProblemDetails()
+                {
+                    Title = "User not found",
+                    Detail = $"User with username [{username}] not found"
+                });
+
+            return Ok(await _commentsService.FindByUsername(username));
         }
 
     }

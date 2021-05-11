@@ -3,18 +3,27 @@
 @inject IUserService UserService;
 
 <section class="comment-section-wrapper">
+    @if (Poll.Comments != null)
+    {
+        @foreach (var comment in Poll.Comments)
+        {
+            <CommentComponent DisplayComment="@comment"/>
+        }
+    }
+
+
     <EditForm Model="@Comment" OnValidSubmit="SubmitComment">
-        <DataAnnotationsValidator />
+        <DataAnnotationsValidator/>
         <div class="input-group input-group-lg input-validation-wrapper create-comment-input-wrapper">
-            <InputText class="form-control input-validate full-width" placeholder="Write a comment..." @bind-Value="Comment.Content" />
+            <InputText class="form-control input-validate full-width" placeholder="Write a comment..." @bind-Value="Comment.Content"/>
             <div class="validation-message-wrapper">
-                <ValidationMessage For="@(() => Comment.Content)" />
+                <ValidationMessage For="@(() => Comment.Content)"/>
             </div>
         </div>
         <button class="btn btn-primary button-send-comment">
             @if (IsLoading)
             {
-                <Bounce Size="20px" Color="#fff" class="@(IsLoading ? "loading-visible" : "loading-invisible")" />
+                <Bounce Size="20px" Color="#fff" class="@(IsLoading ? "loading-visible" : "loading-invisible")"/>
             }
             else
             {
@@ -36,9 +45,6 @@
 
         if (authenticatedUser != null)
         {
-            Console.WriteLine(authenticatedUser.Username);
-            Console.WriteLine(authenticatedUser.Id);
-
             Comment.Author = authenticatedUser;
             Comment.Poll = Poll;
 
@@ -47,6 +53,7 @@
             if (createdComment != null)
             {
                 Comment.Content = String.Empty;
+                Poll.Comments.Add(createdComment);
             }
         }
     }

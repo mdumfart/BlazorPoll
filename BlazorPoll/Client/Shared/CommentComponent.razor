@@ -1,0 +1,15 @@
+﻿@using Humanizer
+<div class="card card-comment full-width">
+    <div class="card-header">
+        <b>@DisplayComment.Author.Username</b>
+        <span class="comment-date">@DisplayComment.CreatedAt.Humanize(utcDate: false)</span>
+    </div>
+    <div class="card-body">
+        @DisplayComment.Content
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Comment DisplayComment { get; set; }
+}

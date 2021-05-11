@@ -39,7 +39,11 @@ namespace BlazorPoll.Server.Dal
 
         public async Task<Poll> FindById(Guid id)
         {
-            return await _context.Polls.Include(p => p.Answers).FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Polls
+                .Include(p => p.Answers)
+                .Include(p => p.Comments)
+                .ThenInclude(c => c.Author)
+                .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<List<Poll>> FindAll()

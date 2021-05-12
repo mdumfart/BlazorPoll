@@ -181,6 +181,21 @@ h1 {
     font-size: 20px;
 }
 
+/* override pager */
+
+.page-link.sort-link {
+    color: var(--black-primary) !important;
+}
+
+.page-item.active > .page-link {
+    background-color: var(--black-primary);
+    border-color: #dee2e6;
+}
+
+.page-item.active > .page-link:hover {
+    color: var(--white);
+}
+
 @media only screen and (max-width: 720px) {
     .input-question-create-wrapper {
         width: 80vw;

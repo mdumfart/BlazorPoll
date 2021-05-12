@@ -7,6 +7,7 @@
   </ItemGroup>
 
 	<ItemGroup>
+    <PackageReference Include="BlazorPagination" Version="0.2.15" />
     <PackageReference Include="BlazorPro.Spinkit" Version="1.2.0" />
     <PackageReference Include="Humanizer" Version="2.10.1" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />

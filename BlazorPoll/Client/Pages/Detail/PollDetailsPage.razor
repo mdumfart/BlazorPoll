@@ -134,7 +134,8 @@ else
         }
 
         var pageCount = (double) Poll.Comments.Count() / PageSize;
-        await LoadPaginatedComments((int) Math.Ceiling(pageCount));
+        var lastPage = pageCount == 0 ? 1 : (int) Math.Ceiling(pageCount);
+        await LoadPaginatedComments(lastPage);
     }
 
 

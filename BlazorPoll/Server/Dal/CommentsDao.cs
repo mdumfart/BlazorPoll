@@ -68,7 +68,7 @@ namespace BlazorPoll.Server.Dal
                     .Take(PageSize)
                     .ToListAsync()
             };
-
+            Console.WriteLine(paginatedWrapper.PageCount);
             return paginatedWrapper;
         }
     }

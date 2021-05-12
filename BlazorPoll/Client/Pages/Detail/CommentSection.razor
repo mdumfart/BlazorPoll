@@ -19,7 +19,7 @@
                          ShowPageNumbers="true"
                          VisiblePages="10"
                          FirstText="First"
-                         LastText="Last"  />
+                         LastText="Last" />
         </div>
     }
 
@@ -72,7 +72,11 @@
             if (createdComment != null)
             {
                 Comment.Content = String.Empty;
-                Poll.Comments.Add(createdComment);
+
+                if (Comments.CurrentPage == Comments.PageCount)
+                {
+                    Comments.Data.Add(createdComment);
+                }
 
                 await JS.InvokeAsync<string>("scrollToBottom");
             }

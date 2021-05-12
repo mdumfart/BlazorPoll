@@ -29,7 +29,7 @@ namespace BlazorPoll.Server.Dal
 
         public async Task<List<Comment>> FindByUsername(string username)
         {
-            return await _context.Comments.Where(c => c.Author.Username == username).ToListAsync();
+            return await _context.Comments.Where(c => c.Author.Username == username).Include(c => c.Poll).OrderByDescending(c => c.CreatedAt).ToListAsync();
         }
 
         public async Task<List<Comment>> FindByPollId(Guid pollId)

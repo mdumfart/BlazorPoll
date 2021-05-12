@@ -41,5 +41,10 @@ namespace BlazorPoll.Server.Services
         {
             return await _pollsDao.FindAll();
         }
+
+        public async Task<List<Poll>> FindByAuthorName(string authorName)
+        {
+            return await _pollsDao.FindByAuthorName(authorName);
+        }
     }
 }

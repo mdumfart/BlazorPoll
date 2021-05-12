@@ -23,8 +23,6 @@ namespace BlazorPoll.Client.Services
 
             authenticationState.AuthenticationStateChanged +=
                 (Task<AuthenticationState> authenticationStateTask) => ChangeAuthenticatedUser();
-            
-            ChangeAuthenticatedUser();
         }
 
         public async Task<User> Register(UserCredentialsDto userCredentials)
@@ -58,8 +56,13 @@ namespace BlazorPoll.Client.Services
             var resp = await _httpClient.PostAsync("api/users/logout", null);
         }
 
-        public User GetAuthenticatedUser()
+        public async Task<User> GetAuthenticatedUser()
         {
+            if (_authenticatedUser == null)
+            {
+                await ChangeAuthenticatedUser();
+            }
+            
             return _authenticatedUser;
         }
 
@@ -70,7 +73,7 @@ namespace BlazorPoll.Client.Services
             return new StringContent(json, Encoding.UTF8, "application/json");
         }
         
-        private async void ChangeAuthenticatedUser()
+        private async Task ChangeAuthenticatedUser()
         {
             var user = await _httpClient.GetFromJsonAsync<User>("api/users/current");
 

@@ -38,6 +38,12 @@ namespace BlazorPoll.Client.Services
             return await _httpClient.GetFromJsonAsync<Poll>($"/api/polls/{id}");
         }
 
+        public async Task<List<Poll>> FindByUsername(string username)
+        {
+            return await _httpClient.GetFromJsonAsync<List<Poll>>($"/api/users/{username}/polls");
+
+        }
+
         public async Task<bool> SendSinglePollAnswer(Poll poll, Answer answer, IPollHubService pollHubService)
         {
             var resp = await _httpClient.PutAsync($"/api/polls/{poll.Id}/vote-single/{answer.Id}", GetStringContent(answer));

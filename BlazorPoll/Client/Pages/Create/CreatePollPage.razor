@@ -2,7 +2,8 @@
 @using BlazorPoll.Client.Services
 @using BlazorPoll.Shared.Enums
 @inject NavigationManager NavigationManager
-@inject IPollService PollService;
+@inject IPollService PollService
+@inject IUserService UserService
 
 <div class="content-centered-horizontal content-centered-vertical create-container">
     <h1>Create a new Poll</h1>
@@ -115,8 +116,9 @@
     private async void ExecuteAddPoll()
     {
         Poll.IsMultipleChoice = ChosenPollType == PollType.MultipleChoice;
-
         Poll.CreatedAt = DateTime.Now;
+
+        Poll.Author = await UserService.GetAuthenticatedUser();
 
         if (!IsLoading)
         {

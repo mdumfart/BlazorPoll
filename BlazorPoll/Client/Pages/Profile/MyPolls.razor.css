@@ -1,0 +1,16 @@
+﻿.card-poll {
+    margin-bottom: 10px;
+}
+
+.card-poll-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.poll-body {
+    cursor: pointer;
+}
+
+.poll-body:hover {
+    background-color: var(--black-primary-super-super-light);
+}

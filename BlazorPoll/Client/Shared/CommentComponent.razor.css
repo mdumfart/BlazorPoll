@@ -2,7 +2,16 @@
     margin-bottom: 10px;
 }
 
-.comment-date {
+.comment-header-details {
     margin-left: 4px;
     font-size: 14px;
 }
+
+.comment-body-navigate {
+    cursor: pointer;
+}
+
+.comment-body-navigate:hover {
+    background-color: var(--black-primary-super-super-light);
+}
+

@@ -5,6 +5,7 @@
     --black-primary: #0d1f2d;
     --black-primary-light: rgba(13, 31, 45, 0.7);
     --black-primary-super-light: rgba(13, 31, 45, 0.2);
+    --black-primary-super-super-light: rgba(13, 31, 45, 0.05);
     --blue-primary: #546A7B;
     --blue-secondary: #9ea3b0;
 }
@@ -111,6 +112,10 @@ h1 {
     width: 50vw !important;
 }
 
+.wide-width {
+    width: 80vw !important;
+}
+
 .validation-message-wrapper {
     font-size: 12px;
 }
@@ -149,6 +154,7 @@ h1 {
 .card {
     color: white;
     border-color: var(--blue-primary);
+    width: 100%;
 }
 
 .card-header {
@@ -169,7 +175,8 @@ h1 {
         min-width: 100px;
     }
 
-    .full-width {
+    .full-width, .wide-width {
         width: 100% !important;
     }
+
 }

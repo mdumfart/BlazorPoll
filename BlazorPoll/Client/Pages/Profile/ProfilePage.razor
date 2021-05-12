@@ -1,7 +1,32 @@
 ﻿@page "/profile"
+@using BlazorPoll.Client.Services
+@inject IPollService PollService
+@inject ICommentsService CommentsService
+@inject IUserService UserService
 
-<CenteredBaseWrapper Header="My profile"></CenteredBaseWrapper>
+
+<div class="content-centered-vertical index-create-container profile-wrapper">
+    <div class="row">
+        <div class="col-sm profile-column">
+            <MyPolls Polls="@MyPolls"></MyPolls>
+        </div>
+        <div class="col-sm profile-column">
+            <MyComments Comments="@MyComments"/>
+        </div>
+    </div>
+</div>
+
 
 @code {
+    public List<Poll> MyPolls = new List<Poll>();
+    public List<Comment> MyComments = new List<Comment>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authenticatedUser = await UserService.GetAuthenticatedUser();
+
+        MyPolls = await PollService.FindByUsername(authenticatedUser.Username);
+        MyComments = await CommentsService.GetByUsername(authenticatedUser.Username);
+    }
 
 }

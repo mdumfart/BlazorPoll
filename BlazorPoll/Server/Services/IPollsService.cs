@@ -13,5 +13,6 @@ namespace BlazorPoll.Server.Services
         public Task Delete(Poll poll);
         public Task<Poll> FindById(Guid id);
         public Task<List<Poll>> FindAll();
+        public Task<List<Poll>> FindByAuthorName(string authorName);
     }
 }

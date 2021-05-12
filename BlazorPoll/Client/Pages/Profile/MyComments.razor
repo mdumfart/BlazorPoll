@@ -1,0 +1,18 @@
+﻿<h3>MyComments</h3>
+
+@if (Comments?.Count == 0)
+{
+    <span>You have not commented any polls yet.</span>
+}
+else
+{
+    foreach (var comment in Comments)
+    {
+        <CommentComponent DisplayComment="@comment" DisplayPollDetails="true" WithNavigation="true"/>
+    }
+}
+
+@code {
+    [Parameter]
+    public List<Comment> Comments { get; set; }
+}

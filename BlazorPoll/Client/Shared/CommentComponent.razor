@@ -1,15 +1,42 @@
 ﻿@using Humanizer
-<div class="card card-comment full-width">
+@inject NavigationManager NavigationManager
+
+<div class="card card-comment">
     <div class="card-header">
         <b>@DisplayComment.Author.Username</b>
-        <span class="comment-date">@DisplayComment.CreatedAt.Humanize(utcDate: false)</span>
+        <span class="comment-header-details">@DisplayComment.CreatedAt.Humanize(utcDate: false)</span>
+        @if (DisplayPollDetails)
+        {
+            <span class="float-right">@@ @DisplayComment.Poll.Question</span>
+        }
     </div>
-    <div class="card-body">
-        @DisplayComment.Content
-    </div>
+    @if (WithNavigation)
+    {
+        <div class="card-body comment-body-navigate" @onclick="NavigateToPollDetails">
+            @DisplayComment.Content
+        </div>
+    }
+    else
+    {
+        <div class="card-body">
+            @DisplayComment.Content
+        </div>
+    }
 </div>
 
 @code {
     [Parameter]
     public Comment DisplayComment { get; set; }
+
+    [Parameter]
+    public bool DisplayPollDetails { get; set; } = false;
+
+    [Parameter]
+    public bool WithNavigation { get; set; } = false;
+
+    private void NavigateToPollDetails()
+    {
+        NavigationManager.NavigateTo($"/poll/{DisplayComment.Poll.Id}");
+    }
+
 }

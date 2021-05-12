@@ -42,7 +42,7 @@
 
     private async Task SubmitComment()
     {
-        var authenticatedUser = UserService.GetAuthenticatedUser();
+        var authenticatedUser = await UserService.GetAuthenticatedUser();
 
         if (authenticatedUser != null)
         {

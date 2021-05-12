@@ -14,11 +14,13 @@ namespace BlazorPoll.Server.Controllers
     {
         private readonly IUserService _userService;
         private readonly ICommentsService _commentsService;
+        private readonly IPollsService _pollsService;
 
-        public UsersController(IUserService userService, ICommentsService commentsService)
+        public UsersController(IUserService userService, ICommentsService commentsService, IPollsService pollsService)
         {
             _userService = userService;
             _commentsService = commentsService;
+            _pollsService = pollsService;
         }
 
         [HttpPost("register")]
@@ -73,5 +75,19 @@ namespace BlazorPoll.Server.Controllers
             return Ok(await _commentsService.FindByUsername(username));
         }
 
+        [HttpGet("{username}/polls")]
+        public async Task<IActionResult> GetPollsByUser(string username)
+        {
+            var user = await _userService.FindByUserName(username);
+
+            if (user == null)
+                return NotFound(new ProblemDetails()
+                {
+                    Title = "User not found",
+                    Detail = $"User with username [{username}] not found"
+                });
+
+            return Ok(await _pollsService.FindByAuthorName(username));
+        }
     }
 }

@@ -11,6 +11,6 @@ namespace BlazorPoll.Client.Services
         Task<User> Register(UserCredentialsDto userCredentials);
         Task<User> Login(UserCredentialsDto userCredentials);
         Task Logout();
-        User GetAuthenticatedUser();
+        Task<User> GetAuthenticatedUser();
     }
 }

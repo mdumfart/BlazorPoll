@@ -1,0 +1,51 @@
+﻿@using Humanizer
+@inject NavigationManager NavigationManager
+
+<h3>MyPolls</h3>
+@if (Polls?.Count == 0)
+{
+    <span>You have not created any polls yet.</span>
+}
+else
+{
+    foreach (var poll in Polls)
+    {
+        <div class="card card-poll">
+            <div class="card-header card-poll-header">
+                    <span>@poll.CreatedAt.Humanize(utcDate: false)</span>
+                    <span>@GetVotesSum(poll) Votes, @poll.Comments.Count Comments</span>
+            </div>
+            <div class="card-body poll-body" @onclick="() => NavigateToPollDetails(poll)">
+                <b>@poll.Question</b>
+            </div>
+        </div>
+    }
+}
+@code {
+    [Parameter]
+    public List<Poll> Polls { get; set; }
+
+    public int GetVotesSum(Poll poll)
+    {
+        var count = 0;
+
+        foreach (var answer in poll.Answers)
+        {
+            count += answer.Count;
+        }
+
+        return count;
+    }
+
+    public string GetPollUrl(Poll poll)
+    {
+        return $"/poll/{poll.Id}";
+    }
+
+
+    private void NavigateToPollDetails(Poll poll)
+    {
+        NavigationManager.NavigateTo($"/poll/{poll.Id}");
+    }
+
+}

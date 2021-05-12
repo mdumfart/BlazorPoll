@@ -19,6 +19,8 @@ namespace BlazorPoll.Server.Dal
 
         public async Task<Poll> Create(Poll poll)
         {
+            _context.Entry(poll.Author).State = EntityState.Unchanged;
+
             await _context.Polls.AddAsync(poll);
             await _context.SaveChangesAsync();
             return poll;
@@ -49,6 +51,16 @@ namespace BlazorPoll.Server.Dal
         public async Task<List<Poll>> FindAll()
         {
             return _context.Polls.ToList();
+        }
+
+        public async Task<List<Poll>> FindByAuthorName(string authorName)
+        {
+            return await _context.Polls
+                .Where(p => p.Author.Username == authorName)
+                .Include(p => p.Answers)
+                .Include(p => p.Comments)
+                .OrderByDescending(p => p.CreatedAt)
+                .ToListAsync();
         }
     }
 }

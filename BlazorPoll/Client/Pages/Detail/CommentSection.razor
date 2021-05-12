@@ -1,7 +1,9 @@
 ﻿@using BlazorPoll.Client.Services
+@using Microsoft.AspNetCore.Identity
 @inject ICommentsService CommentsService
 @inject IUserService UserService
 @inject IJSRuntime JS
+@inject UserManager<IdentityUser> UserManager
 
 <section class="comment-section-wrapper">
     @if (Comments?.Data != null && Comments?.Data?.Count != 0)
@@ -76,11 +78,11 @@
     {
         if (await CheckAuthenticationState())
         {
-            var authenticatedUser = await UserService.GetAuthenticatedUser();
+            var user = await UserService.GetCurrentUser();
 
-            if (authenticatedUser != null)
+            if (user != null)
             {
-                Comment.Author = authenticatedUser;
+                Comment.Author = user;
                 Comment.Poll = Poll;
 
                 var createdComment = await CommentsService.Create(Comment);

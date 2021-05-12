@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BlazorPoll.Server.Services;
 using BlazorPoll.Shared.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 
 namespace BlazorPoll.Server.Controllers
 {
@@ -24,15 +25,22 @@ namespace BlazorPoll.Server.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register([FromBody] UserCredentialsDto userCredentials)
+        public async Task<IActionResult> Register([FromBody] UserCredentialsDto userCredentials)
         {
-            return await _userService.Register(userCredentials);
+            return Ok(await _userService.Register(userCredentials));
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<User>> Login([FromBody] UserCredentialsDto userCredentials)
+        public async Task<IActionResult> Login([FromBody] UserCredentialsDto userCredentials)
         {
-            return await _userService.Login(userCredentials, HttpContext);
+            var result = await _userService.Login(userCredentials, HttpContext);
+
+            if (result.Successful)
+            {
+                return Ok(result);
+            }
+
+            return BadRequest(result);
         }
 
         [HttpGet("current")]

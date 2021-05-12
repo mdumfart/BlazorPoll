@@ -38,9 +38,9 @@ namespace BlazorPoll.Server.Dal
             {
                 CurrentPage = page,
                 PageCount = (int) Math.Ceiling(pageCount),
-                AvailableRows = _context.Comments.Count(c => c.Author.Username == username),
+                AvailableRows = _context.Comments.Count(c => c.Author.UserName == username),
                 Data = await _context.Comments
-                    .Where(c => c.Author.Username == username)
+                    .Where(c => c.Author.UserName == username)
                     .Include(c => c.Poll)
                     .OrderByDescending(c => c.CreatedAt)
                     .Skip(skip)

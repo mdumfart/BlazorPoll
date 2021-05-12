@@ -1,4 +1,5 @@
 ﻿@page "/profile"
+@inject AuthenticationStateProvider AuthenticationStateProvider
 @attribute [Authorize]
 
 @using BlazorPoll.Client.Services
@@ -22,15 +23,18 @@
 
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
     public List<Poll> MyPolls = new List<Poll>();
     public PaginatedWrapperDto<List<Comment>> MyPaginatedComments = new PaginatedWrapperDto<List<Comment>>();
     private User _authenticatedUser;
 
     protected override async Task OnInitializedAsync()
     {
-        _authenticatedUser = await UserService.GetAuthenticatedUser();
+        var user = (await AuthenticationStateTask).User;
 
-        MyPolls = await PollService.FindByUsername(_authenticatedUser.Username);
+        MyPolls = await PollService.FindByUsername(user.Identity?.Name);
         MyPaginatedComments = await LoadPaginatedComments(1);
     }
 

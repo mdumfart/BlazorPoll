@@ -1,9 +1,10 @@
 ﻿@using Humanizer
+@using BlazorPoll.Client.Services
 @inject NavigationManager NavigationManager
 
 <div class="card card-comment">
     <div class="card-header">
-        <b>@DisplayComment.Author.Username</b>
+        <b>@DisplayComment.Author.UserName</b>
         <span class="comment-header-details">@DisplayComment.CreatedAt.Humanize(utcDate: false)</span>
         @if (DisplayPollDetails)
         {

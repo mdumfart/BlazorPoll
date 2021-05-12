@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlazorPoll.Shared.Dtos;
 using BlazorPoll.Shared.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 
 namespace BlazorPoll.Server.Services
 {
     public interface IUserService
     {
-        public Task<User> Register(UserCredentialsDto userCredentials);
-        public Task<User> Login(UserCredentialsDto userCredentials, HttpContext context);
+        public Task<RegisterResultDto> Register(UserCredentialsDto userCredentials);
+        public Task<LoginResultDto> Login(UserCredentialsDto userCredentials, HttpContext context);
         public Task<List<User>> FindAll();
         public Task<User> FindByUserName(string userName);
     }

@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace BlazorPoll.Shared.Models
 {
@@ -19,7 +20,7 @@ namespace BlazorPoll.Shared.Models
         
         public DateTime CreatedAt { get; set; }
         
-        public virtual User Author { get; set; }
+        public virtual IdentityUser Author { get; set; }
 
         public virtual Poll Poll { get; set; }
     }

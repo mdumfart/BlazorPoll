@@ -41,7 +41,6 @@
     public async Task Logout()
     {
         await UserService.Logout();
-        NavigationManager.NavigateTo("/", true);
-        StateHasChanged();
+        NavigationManager.NavigateTo("/");
     }
 }

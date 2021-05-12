@@ -7,16 +7,20 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using System.Text;
 using BlazorPoll.Server.Dal;
 using BlazorPoll.Server.Data;
 using BlazorPoll.Server.Hubs;
 using BlazorPoll.Server.Services;
 using BlazorPoll.Shared.Exceptions;
+using BlazorPoll.Shared.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 
 namespace BlazorPoll.Server
@@ -43,10 +47,6 @@ namespace BlazorPoll.Server
 
             services.AddRazorPages();
 
-            services.AddAuthentication(options =>
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme
-            ).AddCookie();
-            
             services.AddResponseCompression(opts =>
             {
                 opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
@@ -60,6 +60,24 @@ namespace BlazorPoll.Server
                         .EnableSensitiveDataLogging();
             });
 
+            services.AddDefaultIdentity<IdentityUser>().AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters()
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["JwtIssuer"],
+                        ValidAudience = Configuration["JwtAudience"],
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtSecurityKey"]))
+                    };
+                });
+            
             services.AddScoped<IUserService, UsersService>();
             services.AddScoped<IPollsService, PollsService>();
             services.AddScoped<IAnswersService, AnswersService>();
@@ -95,6 +113,7 @@ namespace BlazorPoll.Server
             app.UseRouting();
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

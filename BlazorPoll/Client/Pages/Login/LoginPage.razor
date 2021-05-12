@@ -4,6 +4,7 @@
 @using System.Threading
 @inject IUserService UserService
 @inject NavigationManager NavigationManager
+@inject IToastService ToastService
 
 <EditForm Model="@User" OnValidSubmit="@Login">
     <CenteredBaseWrapper Header="User Login">
@@ -41,11 +42,15 @@
 
     public async void Login()
     {
-        var loggedInUser = await UserService.Login(User);
+        var result = await UserService.Login(User);
 
-        if (loggedInUser != null)
+        if (result.Successful)
         {
             Redirect();
+        }
+        else
+        {
+            ToastService.ShowError(result.Error.ToString(), "Login not successful!");
         }
     }
 
@@ -55,13 +60,11 @@
 
         if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("redirect", out var redirectString))
         {
-            Console.WriteLine(redirectString);
-            NavigationManager.NavigateTo(redirectString, true);
+            NavigationManager.NavigateTo(redirectString);
         }
         else
         {
-            NavigationManager.NavigateTo("/profile", true);
+            NavigationManager.NavigateTo("/profile");
         }
     }
-
 }

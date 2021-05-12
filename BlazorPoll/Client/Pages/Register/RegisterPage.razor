@@ -1,6 +1,8 @@
 ﻿@page "/register"
 @using BlazorPoll.Client.Services
 @inject IUserService UserService
+@inject NavigationManager NavigationManager
+@inject IToastService ToastService
 
 <EditForm Model="@User" OnValidSubmit="@Login">
     <CenteredBaseWrapper Header="Register a new account">
@@ -35,16 +37,27 @@
 
 @code {
     UserDetailsDto User { get; } = new UserDetailsDto();
+    private bool _showErrors;
+    private IEnumerable<string> _errors;
 
     public async void Login()
     {
+        _showErrors = false;
+
         var userCredentials = new UserCredentialsDto() { UserName = User.UserName, Password = User.Password };
 
-        var createdUser = await UserService.Register(userCredentials);
+        var result = await UserService.Register(userCredentials);
 
-        if (createdUser != null)
+        if (result.Successful)
         {
-            Console.WriteLine("Success");
+            NavigationManager.NavigateTo("/login");
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                ToastService.ShowError(error.ToString(), "Registration not successful");
+            }
         }
     }
 }

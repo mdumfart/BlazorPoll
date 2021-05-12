@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Blazored.LocalStorage;
+using Blazored.Toast;
 using BlazorPoll.Client.Providers;
 using BlazorPoll.Client.Services;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -28,10 +30,12 @@ namespace BlazorPoll.Client
 
             builder.Services.AddScoped<ICommentsService, CommentsService>();
 
-            builder.Services.AddOptions();
+            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+
+            builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddAuthorizationCore();
 
-            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
+            builder.Services.AddBlazoredToast();
             
             await builder.Build().RunAsync();
         }

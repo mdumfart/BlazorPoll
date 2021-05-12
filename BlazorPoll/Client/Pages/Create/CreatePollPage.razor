@@ -118,7 +118,7 @@
         Poll.IsMultipleChoice = ChosenPollType == PollType.MultipleChoice;
         Poll.CreatedAt = DateTime.Now;
 
-        Poll.Author = await UserService.GetAuthenticatedUser();
+        Poll.Author = await UserService.GetCurrentUser();
 
         if (!IsLoading)
         {

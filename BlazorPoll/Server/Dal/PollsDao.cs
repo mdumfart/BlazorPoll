@@ -56,7 +56,7 @@ namespace BlazorPoll.Server.Dal
         public async Task<List<Poll>> FindByAuthorName(string authorName)
         {
             return await _context.Polls
-                .Where(p => p.Author.Username == authorName)
+                .Where(p => p.Author.UserName == authorName)
                 .Include(p => p.Answers)
                 .Include(p => p.Comments)
                 .OrderByDescending(p => p.CreatedAt)

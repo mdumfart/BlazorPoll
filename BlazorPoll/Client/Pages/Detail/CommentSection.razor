@@ -27,12 +27,18 @@
     <EditForm Model="@Comment" OnValidSubmit="SubmitComment">
         <DataAnnotationsValidator/>
         <div class="input-group input-group-lg input-validation-wrapper create-comment-input-wrapper">
-            <InputText class="form-control input-validate full-width" placeholder="Write a comment..." @bind-Value="Comment.Content"/>
+            <InputText class="form-control input-validate full-width" placeholder="Write a comment..." @bind-Value="Comment.Content" disabled="@(!IsAuthenticated)"/>
             <div class="validation-message-wrapper">
                 <ValidationMessage For="@(() => Comment.Content)"/>
             </div>
         </div>
-        <button class="btn btn-primary button-send-comment">
+        
+        @if (!IsAuthenticated)
+        {
+            <div class="login-hint"><NavLink href="@GetLoginRedirectLink()">Log in</NavLink> to write a comment</div>
+        }
+
+        <button class="btn btn-primary button-send-comment" disabled="@(!IsAuthenticated)">
             @if (IsLoading)
             {
                 <Bounce Size="20px" Color="#fff" class="@(IsLoading ? "loading-visible" : "loading-invisible")"/>
@@ -53,38 +59,67 @@
     [Parameter]
     public EventCallback<int> OnPageChanged { get; set; }
 
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    public bool IsAuthenticated { get; set; } = false;
     public Comment Comment { get; set; } = new Comment();
     private bool IsLoading { get; set; } = false;
-
     private int _page = 1;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsAuthenticated = await CheckAuthenticationState();
+    }
 
     private async Task SubmitComment()
     {
-        var authenticatedUser = await UserService.GetAuthenticatedUser();
-
-        if (authenticatedUser != null)
+        if (await CheckAuthenticationState())
         {
-            Comment.Author = authenticatedUser;
-            Comment.Poll = Poll;
+            var authenticatedUser = await UserService.GetAuthenticatedUser();
 
-            var createdComment = await CommentsService.Create(Comment);
-
-            if (createdComment != null)
+            if (authenticatedUser != null)
             {
-                Comment.Content = String.Empty;
+                Comment.Author = authenticatedUser;
+                Comment.Poll = Poll;
 
-                if (Comments.CurrentPage == Comments.PageCount)
+                var createdComment = await CommentsService.Create(Comment);
+
+                if (createdComment != null)
                 {
-                    Comments.Data.Add(createdComment);
-                }
+                    Comment.Content = String.Empty;
 
-                await JS.InvokeAsync<string>("scrollToBottom");
+                    if (Comments.CurrentPage == Comments.PageCount)
+                    {
+                        Comments.Data.Add(createdComment);
+                    }
+
+                    await JS.InvokeAsync<string>("scrollToBottom");
+                }
             }
         }
+    }
+
+    private async Task<bool> CheckAuthenticationState()
+    {
+        var authenticationState = await AuthenticationStateTask;
+        var user = authenticationState.User;
+
+        if (user?.Identity != null)
+        {
+            return user.Identity.IsAuthenticated;
+        }
+
+        return false;
     }
 
     private void NotifyParentPageChanged()
     {
         OnPageChanged.InvokeAsync(_page);
+    }
+
+    private string GetLoginRedirectLink()
+    {
+        return $"/login?redirect=/poll/{Poll.Id}";
     }
 }

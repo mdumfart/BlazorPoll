@@ -30,6 +30,11 @@ html, body {
     border: 3px solid var(--black-primary);
 }
 
+.btn-primary:disabled {
+    background-color: var(--black-primary);
+    border-color: var(--black-primary);
+}
+
 .form-control:focus {
     border: 2px solid var(--blue-primary);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(84, 106, 123, 0.7);

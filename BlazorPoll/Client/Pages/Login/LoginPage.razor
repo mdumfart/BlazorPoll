@@ -1,5 +1,7 @@
 ﻿@page "/login"
 @using BlazorPoll.Client.Services
+@using Microsoft.AspNetCore.WebUtilities
+@using System.Threading
 @inject IUserService UserService
 @inject NavigationManager NavigationManager
 
@@ -43,7 +45,23 @@
 
         if (loggedInUser != null)
         {
+            Redirect();
+        }
+    }
+
+    private void Redirect()
+    {
+        var uri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+
+        if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("redirect", out var redirectString))
+        {
+            Console.WriteLine(redirectString);
+            NavigationManager.NavigateTo(redirectString, true);
+        }
+        else
+        {
             NavigationManager.NavigateTo("/profile", true);
         }
     }
+
 }

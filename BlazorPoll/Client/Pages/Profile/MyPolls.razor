@@ -1,7 +1,11 @@
 ﻿@using Humanizer
 @inject NavigationManager NavigationManager
 
-<h3>MyPolls</h3>
+<h3 class="profile-header">Polls you created</h3>
+<div class="profile-header-stats">
+    <span class="fa fa-chart-bar profile-icon"></span> @Polls.Count
+</div>
+
 @if (Polls?.Count == 0)
 {
     <span>You have not created any polls yet.</span>
@@ -13,7 +17,7 @@ else
         <div class="card card-poll">
             <div class="card-header card-poll-header">
                     <span>@poll.CreatedAt.Humanize(utcDate: false)</span>
-                    <span>@GetVotesSum(poll) Votes, @poll.Comments.Count Comments</span>
+                    <span>@GetVotesSum(poll) Votes, @poll.Comments.Count @GetCommentString(poll)</span>
             </div>
             <div class="card-body poll-body" @onclick="() => NavigateToPollDetails(poll)">
                 <b>@poll.Question</b>
@@ -46,6 +50,11 @@ else
     private void NavigateToPollDetails(Poll poll)
     {
         NavigationManager.NavigateTo($"/poll/{poll.Id}");
+    }
+
+    public string GetCommentString(Poll poll)
+    {
+        return poll.Comments.Count == 1 ? "Comment" : "Comments";
     }
 
 }

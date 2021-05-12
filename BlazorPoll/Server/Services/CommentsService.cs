@@ -28,9 +28,9 @@ namespace BlazorPoll.Server.Services
             return await _commentsDao.FindByUsernamePaginated(username, page);
         }
 
-        public async Task<List<Comment>> FindByPollId(Guid pollId)
+        public async Task<PaginatedWrapperDto<List<Comment>>> FindPaginatedByPollId(Guid pollId, int page)
         {
-            return await _commentsDao.FindByPollId(pollId);
+            return await _commentsDao.FindPaginatedByPollId(pollId, page);
         }
     }
 }

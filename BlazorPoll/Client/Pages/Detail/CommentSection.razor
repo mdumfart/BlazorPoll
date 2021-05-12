@@ -4,12 +4,23 @@
 @inject IJSRuntime JS
 
 <section class="comment-section-wrapper">
-    @if (Poll.Comments != null)
+    @if (Comments?.Data != null)
     {
-        @foreach (var comment in Poll.Comments)
+        @foreach (var comment in Comments.Data)
         {
             <CommentComponent DisplayComment="@comment"/>
         }
+
+        <div class="pagination-wrapper">
+            <BlazorPager CurrentPage="@Comments.CurrentPage"
+                         PageCount="@Comments.PageCount"
+                         OnPageChanged="(async e => { _page = e; NotifyParentPageChanged(); })"
+                         ShowFirstLast="false"
+                         ShowPageNumbers="true"
+                         VisiblePages="10"
+                         FirstText="First"
+                         LastText="Last"  />
+        </div>
     }
 
 
@@ -37,8 +48,15 @@
 @code {
     [Parameter]
     public Poll Poll { get; set; }
+    [Parameter]
+    public PaginatedWrapperDto<List<Comment>> Comments { get; set; }
+    [Parameter]
+    public EventCallback<int> OnPageChanged { get; set; }
+
     public Comment Comment { get; set; } = new Comment();
     private bool IsLoading { get; set; } = false;
+
+    private int _page = 1;
 
     private async Task SubmitComment()
     {
@@ -59,5 +77,10 @@
                 await JS.InvokeAsync<string>("scrollToBottom");
             }
         }
+    }
+
+    private void NotifyParentPageChanged()
+    {
+        OnPageChanged.InvokeAsync(_page);
     }
 }

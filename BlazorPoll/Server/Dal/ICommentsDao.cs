@@ -11,6 +11,6 @@ namespace BlazorPoll.Server.Dal
     {
         Task<Comment> Create(Comment comment);
         Task<PaginatedWrapperDto<List<Comment>>> FindByUsernamePaginated(string username, int page);
-        Task<List<Comment>> FindByPollId(Guid pollId);
+        Task<PaginatedWrapperDto<List<Comment>>> FindPaginatedByPollId(Guid pollId, int page);
     }
 }

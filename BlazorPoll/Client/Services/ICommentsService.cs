@@ -10,7 +10,7 @@ namespace BlazorPoll.Client.Services
     public interface ICommentsService
     {
         Task<Comment> Create(Comment comment);
-        Task<List<Comment>> GetByPollId(Guid pollId);
+        Task<PaginatedWrapperDto<List<Comment>>> GetByPollIdPaginated(Guid pollId, int page);
         Task<PaginatedWrapperDto<List<Comment>>> GetByUsernamePaginated(string username, int page);
     }
 }

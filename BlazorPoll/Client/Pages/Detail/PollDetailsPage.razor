@@ -3,6 +3,7 @@
 @using BlazorPoll.Shared.Dtos
 @using Microsoft.AspNetCore.SignalR.Client
 @inject IPollService PollService;
+@inject ICommentsService CommentsService
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JS
 @implements IAsyncDisposable
@@ -13,59 +14,38 @@
 }
 else
 {
-<div class="poll-details-wrapper">
-    <VisualizePoll Poll="@Poll" @ref="VisualizePollChild"></VisualizePoll>
-    <h2 class="question-header-details">@Poll.Question</h2>
+    <div class="poll-details-wrapper">
+        <VisualizePoll Poll="@Poll" @ref="VisualizePollChild"></VisualizePoll>
+        <h2 class="question-header-details">@Poll.Question</h2>
 
 
-    @if (!Copied)
-    {
-        <button class="copy-clipboard-wrapper" @onclick="CopyToClipBoard">
-            <span class="far fa-copy copy-icon"></span><span>Copy link to clipboard</span>
-        </button>
+        @if (!Copied)
+        {
+            <button class="copy-clipboard-wrapper" @onclick="CopyToClipBoard">
+                <span class="far fa-copy copy-icon"></span><span>Copy link to clipboard</span>
+            </button>
 
-    }
-    else
-    {
-        <span class="copied-text">Copied!</span>
-    }
+        }
+        else
+        {
+            <span class="copied-text">Copied!</span>
+        }
 
-    @if (!String.IsNullOrEmpty(Poll.Description))
-    {
-        <div class="poll-description">@Poll.Description</div>
-    }
+        @if (!String.IsNullOrEmpty(Poll.Description))
+        {
+            <div class="poll-description">@Poll.Description</div>
+        }
 
-    @if (!Answered)
-    {
-        <div class="answers-wrapper">
-            @if (Poll.IsMultipleChoice)
-            {
-                <h3>Select multiple answers:</h3>
-                <div class="answers-content-wrapper">
-                    @foreach (var answer in Poll.Answers)
-                    {
-                        <VoteAnswer IsMultipleChoice="true" OnSelectionChangedMultiple="@OnMultipleSelectionChange" Answer="@answer"></VoteAnswer>
-                    }
-                </div>
-                <button class="btn btn-primary button-send-answer" type="submit" @onclick="SubmitAnswer">
-                    @if (IsLoading)
-                    {
-                        <Bounce Size="20px" Color="#fff" class="@(IsLoading ? "loading-visible" : "loading-invisible")" />
-                    }
-                    else
-                    {
-                        <span class="@(!IsLoading ? "loading-visible" : "loading-invisible")">Submit answer</span>
-                    }
-                </button>
-            }
-            else
-            {
-                <h3 class="select-answer-header">Select an answer:</h3>
-                <EditForm Model="Poll.Answers">
+        @if (!Answered)
+        {
+            <div class="answers-wrapper">
+                @if (Poll.IsMultipleChoice)
+                {
+                    <h3>Select multiple answers:</h3>
                     <div class="answers-content-wrapper">
                         @foreach (var answer in Poll.Answers)
                         {
-                            <VoteAnswer IsMultipleChoice="false" Answer="@answer" OnSelectionChangedSingle="@(() => OnSingleSelectionChanged(answer))"></VoteAnswer>
+                            <VoteAnswer IsMultipleChoice="true" OnSelectionChangedMultiple="@OnMultipleSelectionChange" Answer="@answer"></VoteAnswer>
                         }
                     </div>
                     <button class="btn btn-primary button-send-answer" type="submit" @onclick="SubmitAnswer">
@@ -78,19 +58,40 @@ else
                             <span class="@(!IsLoading ? "loading-visible" : "loading-invisible")">Submit answer</span>
                         }
                     </button>
-                </EditForm>
-            }
-        </div>
-    }
-    else
-    {
-        <Answered />
-    }
-    
-    <CommentSection Poll="@Poll" />
+                }
+                else
+                {
+                    <h3 class="select-answer-header">Select an answer:</h3>
+                    <EditForm Model="Poll.Answers">
+                        <div class="answers-content-wrapper">
+                            @foreach (var answer in Poll.Answers)
+                            {
+                                <VoteAnswer IsMultipleChoice="false" Answer="@answer" OnSelectionChangedSingle="@(() => OnSingleSelectionChanged(answer))"></VoteAnswer>
+                            }
+                        </div>
+                        <button class="btn btn-primary button-send-answer" type="submit" @onclick="SubmitAnswer">
+                            @if (IsLoading)
+                            {
+                                <Bounce Size="20px" Color="#fff" class="@(IsLoading ? "loading-visible" : "loading-invisible")" />
+                            }
+                            else
+                            {
+                                <span class="@(!IsLoading ? "loading-visible" : "loading-invisible")">Submit answer</span>
+                            }
+                        </button>
+                    </EditForm>
+                }
+            </div>
+        }
+        else
+        {
+            <Answered />
+        }
+
+        <CommentSection Poll="@Poll" Comments="@PaginatedComments" OnPageChanged="@((int page) => LoadPaginatedComments(page))" />
 
 
-</div>
+    </div>
 }
 
 @code {
@@ -99,11 +100,14 @@ else
     public Poll Poll { get; set; }
     public bool Answered { get; set; } = false;
     public bool Copied { get; set; } = false;
+    public PaginatedWrapperDto<List<Comment>> PaginatedComments { get; set; }
+
     private VisualizePoll VisualizePollChild;
     private bool IsLoading { get; set; } = false;
     private IPollHubService _pollHubService;
     private Answer SelectedSingleAnswer { get; set; }
     private List<Answer> SelectedMultipleAnswers { get; set; } = new List<Answer>();
+    private const int PageSize = 10;
 
 
     protected override async Task OnInitializedAsync()
@@ -128,6 +132,9 @@ else
 
             _pollHubService.PollChanged += async (poll) => await VisualizePollChild.UpdatePoll(poll);
         }
+
+        var pageCount = (double) Poll.Comments.Count() / PageSize;
+        await LoadPaginatedComments((int) Math.Ceiling(pageCount));
     }
 
 
@@ -188,6 +195,11 @@ else
         await JS.InvokeAsync<string>("copyStringToClipboard", NavigationManager.Uri);
         await Task.Delay(5000);
         Copied = false;
+    }
+
+    private async Task LoadPaginatedComments(int page)
+    {
+        PaginatedComments = await CommentsService.GetByPollIdPaginated(Poll.Id, page);
     }
 
 }

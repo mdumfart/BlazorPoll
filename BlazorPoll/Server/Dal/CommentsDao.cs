@@ -38,7 +38,7 @@ namespace BlazorPoll.Server.Dal
             {
                 CurrentPage = page,
                 PageCount = (int) Math.Ceiling(pageCount),
-                AvailableRows = _context.Comments.Count(),
+                AvailableRows = _context.Comments.Count(c => c.Author.Username == username),
                 Data = await _context.Comments
                     .Where(c => c.Author.Username == username)
                     .Include(c => c.Poll)
@@ -51,9 +51,25 @@ namespace BlazorPoll.Server.Dal
             return paginatedWrapper;
         }
 
-        public async Task<List<Comment>> FindByPollId(Guid pollId)
+        public async Task<PaginatedWrapperDto<List<Comment>>> FindPaginatedByPollId(Guid pollId, int page)
         {
-            return await _context.Comments.Where(c => c.Poll.Id == pollId).ToListAsync();
+            var skip = (page - 1) * PageSize;
+            var pageCount = (double)_context.Comments.Count() / PageSize;
+
+            var paginatedWrapper = new PaginatedWrapperDto<List<Comment>>
+            {
+                CurrentPage = page,
+                PageCount = (int)Math.Ceiling(pageCount),
+                AvailableRows = _context.Comments.Count(c => c.Poll.Id == pollId),
+                Data = await _context.Comments
+                    .Where(c => c.Poll.Id == pollId)
+                    .OrderByDescending(c => c.CreatedAt)
+                    .Skip(skip)
+                    .Take(PageSize)
+                    .ToListAsync()
+            };
+
+            return paginatedWrapper;
         }
     }
 }

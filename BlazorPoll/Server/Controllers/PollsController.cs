@@ -23,6 +23,7 @@ namespace BlazorPoll.Server.Controllers
         {
             _pollsService = pollsService;
             _answersService = answersService;
+            _commentsService = commentsService;
         }
 
         [HttpGet("{id}")]
@@ -103,8 +104,8 @@ namespace BlazorPoll.Server.Controllers
             return Ok(poll);
         }
 
-        [HttpGet("{pollId}/comments")]
-        public async Task<IActionResult> GetCommentsByPoll(Guid pollId)
+        [HttpGet("{pollId}/comments/{page}")]
+        public async Task<IActionResult> GetPaginatedCommentsByPoll(Guid pollId, int page)
         {
             var poll = await _pollsService.FindById(pollId);
 
@@ -115,7 +116,7 @@ namespace BlazorPoll.Server.Controllers
                     Detail = $"Poll with id [{pollId}] not found"
                 });
 
-            return Ok(await _commentsService.FindByPollId(pollId));
+            return Ok(await _commentsService.FindPaginatedByPollId(pollId, page));
         }
 
     }

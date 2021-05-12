@@ -33,10 +33,9 @@ namespace BlazorPoll.Client.Services
             return null;
         }
 
-        public async Task<List<Comment>> GetByPollId(Guid pollId)
+        public async Task<PaginatedWrapperDto<List<Comment>>> GetByPollIdPaginated(Guid pollId, int page)
         {
-            return await _httpClient.GetFromJsonAsync<List<Comment>>($"/api/polls/{pollId}/comments");
-
+            return await _httpClient.GetFromJsonAsync<PaginatedWrapperDto<List<Comment>>>($"/api/polls/{pollId}/comments/{page}");
         }
 
         public async Task<PaginatedWrapperDto<List<Comment>>> GetByUsernamePaginated(string username, int page)

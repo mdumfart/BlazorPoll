@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BlazorPoll.Server.Dal;
+using BlazorPoll.Shared.Dtos;
 using BlazorPoll.Shared.Models;
 
 namespace BlazorPoll.Server.Services
@@ -22,9 +23,9 @@ namespace BlazorPoll.Server.Services
             return await _commentsDao.Create(comment);
         }
 
-        public async Task<List<Comment>> FindByUsername(string username)
+        public async Task<PaginatedWrapperDto<List<Comment>>> FindByUsernamePaginated(string username, int page)
         {
-            return await _commentsDao.FindByUsername(username);
+            return await _commentsDao.FindByUsernamePaginated(username, page);
         }
 
         public async Task<List<Comment>> FindByPollId(Guid pollId)

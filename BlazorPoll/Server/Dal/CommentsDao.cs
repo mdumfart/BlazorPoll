@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BlazorPoll.Server.Data;
+using BlazorPoll.Shared.Dtos;
 using BlazorPoll.Shared.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +12,7 @@ namespace BlazorPoll.Server.Dal
     public class CommentsDao : ICommentsDao
     {
         private readonly ApplicationDbContext _context;
+        private const int PageSize = 10;
 
         public CommentsDao(ApplicationDbContext context)
         {
@@ -27,9 +29,26 @@ namespace BlazorPoll.Server.Dal
             return comment;
         }
 
-        public async Task<List<Comment>> FindByUsername(string username)
+        public async Task<PaginatedWrapperDto<List<Comment>>> FindByUsernamePaginated(string username, int page)
         {
-            return await _context.Comments.Where(c => c.Author.Username == username).Include(c => c.Poll).OrderByDescending(c => c.CreatedAt).ToListAsync();
+            var skip = (page - 1) * PageSize;
+            var pageCount = (double) _context.Comments.Count() / PageSize;
+
+            var paginatedWrapper = new PaginatedWrapperDto<List<Comment>>
+            {
+                CurrentPage = page,
+                PageCount = (int) Math.Ceiling(pageCount),
+                AvailableRows = _context.Comments.Count(),
+                Data = await _context.Comments
+                    .Where(c => c.Author.Username == username)
+                    .Include(c => c.Poll)
+                    .OrderByDescending(c => c.CreatedAt)
+                    .Skip(skip)
+                    .Take(PageSize)
+                    .ToListAsync()
+            };
+            
+            return paginatedWrapper;
         }
 
         public async Task<List<Comment>> FindByPollId(Guid pollId)

@@ -1,23 +1,40 @@
 ﻿<h3 class="profile-header">Comments you submitted</h3>
 <div class="profile-header-stats">
-    <span class="far fa-comment profile-icon"></span> @Comments.Count
+    <span class="far fa-comment profile-icon"></span> @Comments?.AvailableRows
 </div>
 
-@if (Comments?.Count == 0)
+@if (Comments?.Data?.Count == 0)
 {
     <span>You have not commented any polls yet.</span>
 }
-else
+else if (Comments?.Data != null)
 {
-    foreach (var comment in Comments)
+    foreach (var comment in Comments?.Data)
     {
-        <CommentComponent DisplayComment="@comment" DisplayPollDetails="true" WithNavigation="true"/>
+        <CommentComponent DisplayComment="@comment" DisplayPollDetails="true" WithNavigation="true" />
     }
 
-    <BlazorPager CurrentPage="1" PageCount="10"/>
+    <BlazorPager CurrentPage="@Comments.CurrentPage"
+                 PageCount="@Comments.PageCount"
+                 OnPageChanged="(async e => { _page = e; NotifyParentPageChanged(); })"
+                 ShowFirstLast="false"
+                 ShowPageNumbers="true"
+                 VisiblePages="10"
+                 FirstText="First"
+                 LastText="Last"  />
 }
 
 @code {
+
     [Parameter]
-    public List<Comment> Comments { get; set; }
+    public PaginatedWrapperDto<List<Comment>> Comments { get; set; }
+    [Parameter]
+    public EventCallback<int> OnPageChanged { get; set; }
+    private int _page = 1;
+
+    private void NotifyParentPageChanged()
+    {
+        OnPageChanged.InvokeAsync(_page);
+    }
+
 }

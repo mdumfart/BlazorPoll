@@ -11,6 +11,6 @@ namespace BlazorPoll.Client.Services
     {
         Task<Comment> Create(Comment comment);
         Task<List<Comment>> GetByPollId(Guid pollId);
-        Task<List<Comment>> GetByUsername(string username);
+        Task<PaginatedWrapperDto<List<Comment>>> GetByUsernamePaginated(string username, int page);
     }
 }

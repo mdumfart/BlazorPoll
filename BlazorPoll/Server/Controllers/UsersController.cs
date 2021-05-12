@@ -60,8 +60,8 @@ namespace BlazorPoll.Server.Controllers
             return Ok();
         }
 
-        [HttpGet("{username}/comments")]
-        public async Task<IActionResult> GetCommentsByUser(string username)
+        [HttpGet("{username}/comments/{page}")]
+        public async Task<IActionResult> GetPaginatedCommentsByUser(string username, int page)
         {
             var user = await _userService.FindByUserName(username);
 
@@ -72,7 +72,7 @@ namespace BlazorPoll.Server.Controllers
                     Detail = $"User with username [{username}] not found"
                 });
 
-            return Ok(await _commentsService.FindByUsername(username));
+            return Ok(await _commentsService.FindByUsernamePaginated(username, page));
         }
 
         [HttpGet("{username}/polls")]

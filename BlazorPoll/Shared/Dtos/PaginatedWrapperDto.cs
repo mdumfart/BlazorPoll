@@ -10,6 +10,7 @@ namespace BlazorPoll.Shared.Dtos
     {
         public int CurrentPage { get; set; }
         public int PageCount { get; set; }
+        public int AvailableRows { get; set; }
         public T Data { get; set; }
     }
 }

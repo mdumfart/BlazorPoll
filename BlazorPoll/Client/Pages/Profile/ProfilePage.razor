@@ -1,5 +1,6 @@
 ﻿@page "/profile"
 @using BlazorPoll.Client.Services
+@using BlazorPoll.Shared.Dtos
 @inject IPollService PollService
 @inject ICommentsService CommentsService
 @inject IUserService UserService
@@ -11,7 +12,7 @@
             <MyPolls Polls="@MyPolls"></MyPolls>
         </div>
         <div class="col-sm profile-column">
-            <MyComments Comments="@MyComments"/>
+            <MyComments Comments="@MyPaginatedComments" OnPageChanged="@((int page) => LoadPage(page))"/>
         </div>
     </div>
 </div>
@@ -19,14 +20,24 @@
 
 @code {
     public List<Poll> MyPolls = new List<Poll>();
-    public List<Comment> MyComments = new List<Comment>();
+    public PaginatedWrapperDto<List<Comment>> MyPaginatedComments = new PaginatedWrapperDto<List<Comment>>();
+    private User _authenticatedUser;
 
     protected override async Task OnInitializedAsync()
     {
-        var authenticatedUser = await UserService.GetAuthenticatedUser();
+        _authenticatedUser = await UserService.GetAuthenticatedUser();
 
-        MyPolls = await PollService.FindByUsername(authenticatedUser.Username);
-        MyComments = await CommentsService.GetByUsername(authenticatedUser.Username);
+        MyPolls = await PollService.FindByUsername(_authenticatedUser.Username);
+        MyPaginatedComments = await LoadPaginatedComments(1);
     }
 
+    public async Task LoadPage(int page)
+    {
+        MyPaginatedComments = await LoadPaginatedComments(page);
+    }
+
+    private async Task<PaginatedWrapperDto<List<Comment>>> LoadPaginatedComments(int page)
+    {
+        return await CommentsService.GetByUsernamePaginated(_authenticatedUser.Username, page);
+    }
 }

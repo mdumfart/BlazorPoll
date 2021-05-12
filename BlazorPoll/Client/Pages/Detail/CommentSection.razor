@@ -4,7 +4,7 @@
 @inject IJSRuntime JS
 
 <section class="comment-section-wrapper">
-    @if (Comments?.Data != null)
+    @if (Comments?.Data != null && Comments?.Data?.Count != 0)
     {
         @foreach (var comment in Comments.Data)
         {

@@ -1,6 +1,9 @@
 ﻿@page "/profile"
+@attribute [Authorize]
+
 @using BlazorPoll.Client.Services
 @using BlazorPoll.Shared.Dtos
+@using Microsoft.AspNetCore.Authorization
 @inject IPollService PollService
 @inject ICommentsService CommentsService
 @inject IUserService UserService

@@ -96,6 +96,16 @@
                     {
                         Comments.Data.Add(createdComment);
                     }
+                    else if (Comments == null)
+                    {
+                        Comments = new PaginatedWrapperDto<List<Comment>>()
+                        {
+                            AvailableRows = 1,
+                            CurrentPage = 1,
+                            PageCount = 1,
+                            Data = new List<Comment>() { createdComment }
+                        };
+                    }
 
                     await JS.InvokeAsync<string>("scrollToBottom");
                 }

@@ -24,6 +24,7 @@ namespace BlazorPoll.Shared.Models
         
         public DateTime CreatedAt { get; set; }
         
+        [ValidateComplexType]
         public virtual List<Answer> Answers { get; set; }
         
         public virtual IdentityUser Author { get; set; }

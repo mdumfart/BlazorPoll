@@ -2,19 +2,19 @@
 @using System.Text.Encodings.Web
 @inject NavigationManager NavigationManager
 
-<CenteredBaseWrapper Header="Let's create polls with Blazor!">
+<CenteredBaseWrapperComponent Header="Let's create polls with Blazor!">
     <ContentTemplate>
-        <input type="text" 
+        <input type="text"
                class="form-control input-question-create"
                aria-label="Large"
                aria-describedby="inputGroup-sizing-sm"
                placeholder="Type a question..."
-               @bind="QuestionString"/>
+               @bind="QuestionString" />
     </ContentTemplate>
     <FooterTemplate>
         <button class="btn btn-primary nav-button button-question-create" @onclick="NavigateToCreate">Create</button>
     </FooterTemplate>
-</CenteredBaseWrapper>
+</CenteredBaseWrapperComponent>
 
 @code{
     public string QuestionString { get; set; } = "";

@@ -7,7 +7,7 @@
 @inject IToastService ToastService
 
 <EditForm Model="@User" OnValidSubmit="@Login">
-    <CenteredBaseWrapper Header="User Login">
+    <CenteredBaseWrapperComponent Header="User Login">
         <ContentTemplate>
             <DataAnnotationsValidator />
             <div class="input-group input-group-lg input-login input-validation-wrapper">
@@ -33,7 +33,7 @@
         <FooterTemplate>
             <button type="submit" class="btn btn-primary nav-button button-question-create">Log me in!</button>
         </FooterTemplate>
-    </CenteredBaseWrapper>
+    </CenteredBaseWrapperComponent>
 </EditForm>
 
 

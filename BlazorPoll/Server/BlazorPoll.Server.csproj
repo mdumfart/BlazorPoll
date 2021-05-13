@@ -44,6 +44,8 @@
 	  <Watch Remove="Data\ApplicationDBContext.cs" />
 	  <Watch Remove="Data\Migrations\20210512163052_CreateIdentitySchema.cs" />
 	  <Watch Remove="Data\Migrations\20210512163052_CreateIdentitySchema.Designer.cs" />
+	  <Watch Remove="Data\Migrations\20210513094024_removeGuid.cs" />
+	  <Watch Remove="Data\Migrations\20210513094024_removeGuid.Designer.cs" />
 	  <Watch Remove="Models\ErrorResponse.cs" />
 	  <Watch Remove="Services\AnswersService.cs" />
 	  <Watch Remove="Services\CommentsService.cs" />

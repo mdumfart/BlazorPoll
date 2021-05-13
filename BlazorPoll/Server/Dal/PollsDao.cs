@@ -19,7 +19,10 @@ namespace BlazorPoll.Server.Dal
 
         public async Task<Poll> Create(Poll poll)
         {
-            _context.Entry(poll.Author).State = EntityState.Unchanged;
+            if (poll.Author != null)
+            {
+                _context.Entry(poll.Author).State = EntityState.Unchanged;
+            }
 
             await _context.Polls.AddAsync(poll);
             await _context.SaveChangesAsync();

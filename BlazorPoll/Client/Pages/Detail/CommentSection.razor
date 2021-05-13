@@ -4,7 +4,6 @@
 @inject ICommentsService CommentsService
 @inject IUserService UserService
 @inject IJSRuntime JS
-@inject UserManager<IdentityUser> UserManager
 
 <section class="comment-section-wrapper">
     @if (Comments?.Data != null && Comments?.Data?.Count != 0)

@@ -116,6 +116,8 @@
 
     private async void ExecuteAddPoll()
     {
+        IsLoading = true;
+
         Poll.IsMultipleChoice = ChosenPollType == PollType.MultipleChoice;
         Poll.CreatedAt = DateTime.Now;
 
@@ -130,13 +132,9 @@
             Poll.Author = await UserService.FindByUsername(currentUsername);
         }
 
-        if (!IsLoading)
-        {
-            IsLoading = true;
-            var id = await PollService.AddPoll(Poll);
-            NavigateToDetails(id);
-            IsLoading = false;
-        }
+        var id = await PollService.AddPoll(Poll);
+        NavigateToDetails(id);
+        IsLoading = false;
     }
 
     private void NavigateToDetails(Guid id)

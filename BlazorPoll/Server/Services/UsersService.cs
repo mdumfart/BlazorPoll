@@ -20,16 +20,14 @@ namespace BlazorPoll.Server.Services
 {
     public class UsersService : IUserService
     {
-        private readonly IUsersDao _userDao;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly PasswordHasher<UserCredentialsDto> _hasher = new PasswordHasher<UserCredentialsDto>();
         private readonly IConfiguration _configuration;
 
 
-        public UsersService(IUsersDao userDao, UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration)
+        public UsersService(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, IConfiguration configuration)
         {
-            _userDao = userDao;
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
@@ -37,7 +35,7 @@ namespace BlazorPoll.Server.Services
         
         public async Task<RegisterResultDto> Register(UserCredentialsDto userCredentials)
         {
-            if (await _userDao.FindByUserName(userCredentials.UserName) != null)
+            if (await _userManager.FindByNameAsync(userCredentials.UserName) != null)
             {
                 throw new UserAlreadyExistsException(userCredentials.UserName);
             }
@@ -87,22 +85,9 @@ namespace BlazorPoll.Server.Services
             return new LoginResultDto { Successful = true, Token = new JwtSecurityTokenHandler().WriteToken(token) };
         }
 
-        public async Task<List<User>> FindAll()
+        public async Task<IdentityUser> FindByUserName(string userName)
         {
-            return await _userDao.FindAll();
-        }
-
-        public async Task<User> FindByUserName(string userName)
-        {
-            return await _userDao.FindByUserName(userName);
-        }
-
-        private PasswordVerificationResult VerifyUser(UserCredentialsDto providedCredentials, User storedUser)
-        {
-            var storedCredentials = new UserCredentialsDto()
-                { UserName = storedUser.Username, Password = storedUser.Password };
-            
-            return _hasher.VerifyHashedPassword(storedCredentials, storedCredentials.Password, providedCredentials.Password);
+            return await _userManager.FindByNameAsync(userName);
         }
     }
 }

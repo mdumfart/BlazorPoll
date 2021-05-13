@@ -12,6 +12,7 @@ using Blazored.Toast;
 using BlazorPoll.Client.Providers;
 using BlazorPoll.Client.Services;
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace BlazorPoll.Client
 {
@@ -31,7 +32,7 @@ namespace BlazorPoll.Client
             builder.Services.AddScoped<ICommentsService, CommentsService>();
 
             builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
-
+            
             builder.Services.AddBlazoredLocalStorage();
             builder.Services.AddAuthorizationCore();
 

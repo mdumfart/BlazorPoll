@@ -15,7 +15,6 @@ namespace BlazorPoll.Server.Data
         {
         }
         
-        public DbSet<User> Users { get; set; }
         public DbSet<Poll> Polls { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Comment> Comments { get; set; }

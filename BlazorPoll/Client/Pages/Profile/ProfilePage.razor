@@ -4,6 +4,7 @@
 
 @using BlazorPoll.Client.Services
 @using BlazorPoll.Shared.Dtos
+@using Bunit.Extensions
 @using Microsoft.AspNetCore.Authorization
 @inject IPollService PollService
 @inject ICommentsService CommentsService
@@ -28,14 +29,16 @@
 
     public List<Poll> MyPolls = new List<Poll>();
     public PaginatedWrapperDto<List<Comment>> MyPaginatedComments = new PaginatedWrapperDto<List<Comment>>();
-    private User _authenticatedUser;
 
     protected override async Task OnInitializedAsync()
     {
-        var user = (await AuthenticationStateTask).User;
+        var currentUsername = await UserService.GetCurrentUsername();
 
-        MyPolls = await PollService.FindByUsername(user.Identity?.Name);
-        MyPaginatedComments = await LoadPaginatedComments(1);
+        if (!currentUsername.IsNullOrEmpty())
+        {
+            MyPolls = await PollService.FindByUsername(currentUsername);
+            MyPaginatedComments = await LoadPaginatedComments(1);
+        }
     }
 
     public async Task LoadPage(int page)
@@ -45,6 +48,13 @@
 
     private async Task<PaginatedWrapperDto<List<Comment>>> LoadPaginatedComments(int page)
     {
-        return await CommentsService.GetByUsernamePaginated(_authenticatedUser.Username, page);
+        var currentUsername = await UserService.GetCurrentUsername();
+
+        if (!currentUsername.IsNullOrEmpty())
+        {
+            return await CommentsService.GetByUsernamePaginated(currentUsername, page);
+        }
+
+        return null;
     }
 }

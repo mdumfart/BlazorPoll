@@ -40,9 +40,7 @@
 	  <Watch Remove="Dal\IAnswerDao.cs" />
 	  <Watch Remove="Dal\ICommentsDao.cs" />
 	  <Watch Remove="Dal\IPollsDao.cs" />
-	  <Watch Remove="Dal\IUsersDao.cs" />
 	  <Watch Remove="Dal\PollsDao.cs" />
-	  <Watch Remove="Dal\UsersDao.cs" />
 	  <Watch Remove="Data\ApplicationDBContext.cs" />
 	  <Watch Remove="Data\Migrations\20210512163052_CreateIdentitySchema.cs" />
 	  <Watch Remove="Data\Migrations\20210512163052_CreateIdentitySchema.Designer.cs" />

@@ -83,7 +83,6 @@ namespace BlazorPoll.Server
             services.AddScoped<IAnswersService, AnswersService>();
             services.AddScoped<ICommentsService, CommentsService>();
 
-            services.AddScoped<IUsersDao, UsersDao>();
             services.AddScoped<IPollsDao, PollsDao>();
             services.AddScoped<IAnswerDao, AnswerDao>();
             services.AddScoped<ICommentsDao, CommentsDao>();

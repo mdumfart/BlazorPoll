@@ -1,6 +1,7 @@
 ﻿@page "/create/{question?}"
 @using BlazorPoll.Client.Services
 @using BlazorPoll.Shared.Enums
+@using Bunit.Extensions
 @inject NavigationManager NavigationManager
 @inject IPollService PollService
 @inject IUserService UserService
@@ -118,7 +119,16 @@
         Poll.IsMultipleChoice = ChosenPollType == PollType.MultipleChoice;
         Poll.CreatedAt = DateTime.Now;
 
-        Poll.Author = await UserService.GetCurrentUser();
+        var currentUsername = await UserService.GetCurrentUsername();
+
+        if (currentUsername.IsNullOrEmpty())
+        {
+            Poll.Author = null;
+        }
+        else
+        {
+            Poll.Author = await UserService.FindByUsername(currentUsername);
+        }
 
         if (!IsLoading)
         {

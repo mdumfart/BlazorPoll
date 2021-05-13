@@ -21,18 +21,15 @@ namespace BlazorPoll.Client.Services
         private readonly HttpClient _httpClient;
         private readonly ILocalStorageService _localStorage;
         private readonly AuthenticationStateProvider _authenticationStateProvider;
-        private readonly UserManager<IdentityUser> _userManager;
 
         public UserService(
             HttpClient httpClient,
             ILocalStorageService localStorage,
-            AuthenticationStateProvider authenticationStateProvider,
-            UserManager<IdentityUser> userManager)
+            AuthenticationStateProvider authenticationStateProvider)
         {
             _httpClient = httpClient;
             _localStorage = localStorage;
             _authenticationStateProvider = authenticationStateProvider;
-            _userManager = userManager;
         }
 
         public async Task<RegisterResultDto> Register(UserCredentialsDto userCredentials)
@@ -72,17 +69,16 @@ namespace BlazorPoll.Client.Services
             _httpClient.DefaultRequestHeaders.Authorization = null;
         }
 
-        public async Task<IdentityUser> GetCurrentUser()
+        public async Task<IdentityUser> FindByUsername(string username)
+        {
+            return await _httpClient.GetFromJsonAsync<IdentityUser>($"/api/users/{username}");
+        }
+
+        public async Task<string> GetCurrentUsername()
         {
             var userClaimsPrincipal = (await _authenticationStateProvider.GetAuthenticationStateAsync()).User;
 
-            if (userClaimsPrincipal.Identity != null)
-            {
-                return await _userManager.GetUserAsync(userClaimsPrincipal);
-
-            }
-
-            return null;
+            return userClaimsPrincipal.Identity != null ? userClaimsPrincipal.Identity.Name : string.Empty;
         }
 
         private StringContent GetStringContent(object o)

@@ -1,4 +1,5 @@
 ﻿@using BlazorPoll.Client.Services
+@using Bunit.Extensions
 @using Microsoft.AspNetCore.Identity
 @inject ICommentsService CommentsService
 @inject IUserService UserService
@@ -78,10 +79,11 @@
     {
         if (await CheckAuthenticationState())
         {
-            var user = await UserService.GetCurrentUser();
+            var currentUsername = await UserService.GetCurrentUsername();
 
-            if (user != null)
+            if (!currentUsername.IsNullOrEmpty())
             {
+                var user = await UserService.FindByUsername(currentUsername);
                 Comment.Author = user;
                 Comment.Poll = Poll;
 

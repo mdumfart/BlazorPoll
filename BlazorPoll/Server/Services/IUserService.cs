@@ -13,7 +13,6 @@ namespace BlazorPoll.Server.Services
     {
         public Task<RegisterResultDto> Register(UserCredentialsDto userCredentials);
         public Task<LoginResultDto> Login(UserCredentialsDto userCredentials, HttpContext context);
-        public Task<List<User>> FindAll();
-        public Task<User> FindByUserName(string userName);
+        public Task<IdentityUser> FindByUserName(string userName);
     }
 }

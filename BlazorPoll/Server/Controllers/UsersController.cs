@@ -43,22 +43,21 @@ namespace BlazorPoll.Server.Controllers
             return BadRequest(result);
         }
 
-        [HttpGet("current")]
-        public async Task<ActionResult<User>> GetCurrent()
+        [HttpGet("{username}")]
+        public async Task<IActionResult> GetByUserName(string username)
         {
-            User currentUser = new User();
+            var user = await _userService.FindByUserName(username);
 
-            if (User.Identity != null && User.Identity.IsAuthenticated)
+            if (user != null)
             {
-                var username = User.FindFirstValue(ClaimTypes.Name);
-
-                if (username != null)
-                {
-                    currentUser = await _userService.FindByUserName(username);
-                }
+                return Ok(user);
             }
 
-            return await Task.FromResult(currentUser);
+            return NotFound(new ProblemDetails()
+            {
+                Title = "User not found",
+                Detail = $"User with username [{username}] not found"
+            });
         }
 
         [HttpPost("logout")]
@@ -86,6 +85,7 @@ namespace BlazorPoll.Server.Controllers
         [HttpGet("{username}/polls")]
         public async Task<IActionResult> GetPollsByUser(string username)
         {
+            Console.WriteLine(username);
             var user = await _userService.FindByUserName(username);
 
             if (user == null)

@@ -21,7 +21,6 @@ namespace BlazorPoll.Server.Controllers
         [Route("/r")]
         public async Task<IActionResult> Error()
         {
-            Console.WriteLine("huh");
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
             var exception = context.Error;
 

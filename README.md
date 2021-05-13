@@ -3,6 +3,10 @@
 BlazorPoll is a prototype for creating and voting on single/multiple choice polls.
 The intention is a proof of work for Microsoft Blazor Webassembly.
 
+## Prerequisites
+
+- .Net SDK 5.x
+
 ## Quickstart
 
 1. Clone the repository

@@ -7,7 +7,7 @@
         <div class="input-group input-group-lg input-create-poll input-validation-wrapper">
             <div class="input-delete-wrapper">
                 <InputText class="form-control input-validate full-width" placeholder="Provide an answer" @bind-Value="Item.Content"/>
-                <button class="delete-answer-button @((Item.Id == 0 || Item.Id == 1)? "hide" : "")" @onclick="DeleteAnswer">
+                <button class="delete-answer-button @((CountAnswer == 0 || CountAnswer == 1)? "hide" : "")" @onclick="DeleteAnswer">
                     <span class="fa fa-trash delete-answer"></span>
                 </button>
             </div>

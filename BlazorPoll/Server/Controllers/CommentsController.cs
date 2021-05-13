@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BlazorPoll.Server.Services;
 using BlazorPoll.Shared.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BlazorPoll.Server.Controllers
 {
@@ -19,7 +20,7 @@ namespace BlazorPoll.Server.Controllers
             _commentsService = commentsService;
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public async Task<ActionResult<Comment>> Create([FromBody] Comment comment)
         {
             return Ok(await _commentsService.Create(comment));

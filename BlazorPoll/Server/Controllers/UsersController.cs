@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BlazorPoll.Server.Services;
+using BlazorPoll.Shared.Dtos;
+using BlazorPoll.Shared.Exceptions;
 using BlazorPoll.Shared.Models;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 
 namespace BlazorPoll.Server.Controllers
@@ -27,7 +31,14 @@ namespace BlazorPoll.Server.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserCredentialsDto userCredentials)
         {
-            return Ok(await _userService.Register(userCredentials));
+            try
+            {
+                return Ok(await _userService.Register(userCredentials));
+            }
+            catch (UserAlreadyExistsException e)
+            {
+                return Ok(new RegisterResultDto() { Successful = false, Errors = new List<string>() { e.Message } });
+            }
         }
 
         [HttpPost("login")]
@@ -67,7 +78,7 @@ namespace BlazorPoll.Server.Controllers
             return Ok();
         }
 
-        [HttpGet("{username}/comments/{page}")]
+        [HttpGet("{username}/comments/{page}"), Authorize]
         public async Task<IActionResult> GetPaginatedCommentsByUser(string username, int page)
         {
             var user = await _userService.FindByUserName(username);
@@ -82,10 +93,9 @@ namespace BlazorPoll.Server.Controllers
             return Ok(await _commentsService.FindByUsernamePaginated(username, page));
         }
 
-        [HttpGet("{username}/polls")]
+        [HttpGet("{username}/polls"), Authorize]
         public async Task<IActionResult> GetPollsByUser(string username)
         {
-            Console.WriteLine(username);
             var user = await _userService.FindByUserName(username);
 
             if (user == null)

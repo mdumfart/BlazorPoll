@@ -38,6 +38,12 @@ h3 {
 
 .question-header-details {
     margin-top: 3vh;
+    margin-bottom: 0px;
+}
+
+.question-header-author {
+    margin-bottom: 12px;
+    font-size: 12px;
 }
 
 .poll-description {

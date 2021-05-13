@@ -46,6 +46,7 @@ namespace BlazorPoll.Server.Dal
         {
             return await _context.Polls
                 .Include(p => p.Answers)
+                .Include(p => p.Author)
                 .Include(p => p.Comments)
                 .ThenInclude(c => c.Author)
                 .FirstOrDefaultAsync(p => p.Id == id);

@@ -1,0 +1,14 @@
+﻿Logged in as <b>@Username</b>
+
+@code {
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationStateTask { get; set; }
+
+    public string Username { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Username = (await AuthenticationStateTask).User.Identity?.Name;
+    }
+
+}

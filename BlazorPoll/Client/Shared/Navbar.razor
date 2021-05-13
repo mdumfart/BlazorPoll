@@ -8,6 +8,11 @@
         <div class="navbar-title">BlazorPoll</div>
     </a>
     <div class="nav-items-wrapper">
+        <AuthorizeView>
+            <Authorized>
+                <LoggedInAsComponent/>
+            </Authorized>
+        </AuthorizeView>
         <NavLink href="create">
             <button class="btn btn-primary nav-button">
                 <div class="nav-button-content">

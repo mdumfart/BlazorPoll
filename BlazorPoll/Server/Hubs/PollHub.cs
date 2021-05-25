@@ -9,7 +9,6 @@ namespace BlazorPoll.Server.Hubs
 {
     public class PollHub : Hub
     {
-
         public async Task SendPollToGroup(Poll poll)
         {
             await Clients.Groups(poll.Id.ToString()).SendAsync("UpdatePoll", poll);

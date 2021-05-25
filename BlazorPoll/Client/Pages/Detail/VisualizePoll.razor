@@ -14,12 +14,12 @@
     {
         if (Poll != null && firstRender)
         {
-            await JS.InvokeAsync<Poll>("drawBarChart", Poll, _pollBarChartRef);
+            await JS.InvokeVoidAsync("drawBarChart", Poll, _pollBarChartRef);
         }
     }
 
     public async Task UpdatePoll(Poll poll)
     {
-        await JS.InvokeAsync<Poll>("updateChartCounts", poll);
+        await JS.InvokeVoidAsync("updateChartCounts", poll);
     }
 }

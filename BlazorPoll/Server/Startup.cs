@@ -107,7 +107,7 @@ namespace BlazorPoll.Server
             app.UseStaticFiles();
 
             // TODO
-            app.UseExceptionHandler("/r");
+            app.UseExceptionHandler("/error/test");
 
             app.UseRouting();
 

@@ -53,7 +53,7 @@ else
                 <div class="answers-content-wrapper">
                     @foreach (var answer in Poll.Answers)
                     {
-                        <VoteAnswer IsMultipleChoice="true" OnSelectionChangedMultiple="@OnMultipleSelectionChange" Answer="@answer"></VoteAnswer>
+                        <VoteAnswer IsMultipleChoice="true" OnSelectionChangedMultiple="@OnMultipleSelectionChange" Answer="@answer"/>
                     }
                 </div>
                 <button class="btn btn-primary button-send-answer" type="submit" @onclick="SubmitAnswer">

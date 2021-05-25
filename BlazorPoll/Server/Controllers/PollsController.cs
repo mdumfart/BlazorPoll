@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BlazorPoll.Server.Services;
 using BlazorPoll.Shared.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace BlazorPoll.Server.Controllers
 {

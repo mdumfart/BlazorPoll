@@ -14,11 +14,12 @@ namespace BlazorPoll.Server.Controllers
 {
     [AllowAnonymous]
     [ApiExplorerSettings(IgnoreApi = true)]
+    [Route("error")]
     public class ErrorController : ControllerBase
     {
         private ErrorResponse _errorResponse = null;
 
-        [Route("/r")]
+        [Route("/test")]
         public async Task<IActionResult> Error()
         {
             var context = HttpContext.Features.Get<IExceptionHandlerFeature>();
@@ -43,6 +44,14 @@ namespace BlazorPoll.Server.Controllers
 
         }
 
+        private Task SendError()
+        {
+            HttpContext.Response.ContentType = "application/json";
+            HttpContext.Response.StatusCode = _errorResponse.Status;
+
+            return HttpContext.Response.WriteAsync(_errorResponse.ToString());
+        }
+
         private void CreateValidationError(ValidationException exception)
         {
             _errorResponse =
@@ -59,14 +68,6 @@ namespace BlazorPoll.Server.Controllers
         {
             _errorResponse =
                 new ErrorResponse(400, HttpStatusCode.BadRequest.ToString(), exception.Message);
-        }
-
-        private Task SendError()
-        {
-            HttpContext.Response.ContentType = "application/json";
-            HttpContext.Response.StatusCode = _errorResponse.Status;
-
-            return HttpContext.Response.WriteAsync(_errorResponse.ToString());
         }
     }
 }

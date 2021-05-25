@@ -21,9 +21,9 @@ namespace BlazorPoll.Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Poll>().HasOne<IdentityUser>(p => p.Author).WithMany();
-            modelBuilder.Entity<Poll>().HasMany<Answer>(p => p.Answers).WithOne(a => a.Poll);
-            modelBuilder.Entity<Poll>().HasMany<Comment>(p => p.Comments).WithOne(c => c.Poll);
+            modelBuilder.Entity<Poll>().HasOne(p => p.Author).WithMany();
+            modelBuilder.Entity<Poll>().HasMany(p => p.Answers).WithOne(a => a.Poll);
+            modelBuilder.Entity<Poll>().HasMany(p => p.Comments).WithOne(c => c.Poll);
             modelBuilder.Entity<IdentityUser>().HasMany<Comment>().WithOne(c => c.Author);
             
             base.OnModelCreating(modelBuilder);

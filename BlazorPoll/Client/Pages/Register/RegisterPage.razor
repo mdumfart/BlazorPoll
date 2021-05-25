@@ -4,7 +4,7 @@
 @inject NavigationManager NavigationManager
 @inject IToastService ToastService
 
-<EditForm Model="@User" OnValidSubmit="@Login">
+<EditForm Model="@User" OnValidSubmit="@Register">
     <CenteredBaseWrapperComponent Header="Register a new account">
         <ContentTemplate>
             <DataAnnotationsValidator />
@@ -36,11 +36,11 @@
 </EditForm>
 
 @code {
-    UserDetailsDto User { get; } = new UserDetailsDto();
+    UserDetailsDto User { get; } = new();
     private bool _showErrors;
     private IEnumerable<string> _errors;
 
-    public async void Login()
+    public async void Register()
     {
         _showErrors = false;
 

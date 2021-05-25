@@ -110,7 +110,7 @@ namespace BlazorPoll.Client.Pages.Detail
         private async Task CopyToClipBoard()
         {
             Copied = true;
-            await JS.InvokeAsync<string>("copyStringToClipboard", NavigationManager.Uri);
+            await JS.InvokeVoidAsync("copyStringToClipboard", NavigationManager.Uri);
             await Task.Delay(5000);
             Copied = false;
         }

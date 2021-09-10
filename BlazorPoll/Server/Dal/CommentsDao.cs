@@ -32,7 +32,7 @@ namespace BlazorPoll.Server.Dal
         public async Task<PaginatedWrapperDto<List<Comment>>> FindByUsernamePaginated(string username, int page)
         {
             var skip = (page - 1) * PageSize;
-            var pageCount = (double) _context.Comments.Count() / PageSize;
+            var pageCount = (double) _context.Comments.Count(cmt => cmt.Author.UserName == username) / PageSize;
 
             var paginatedWrapper = new PaginatedWrapperDto<List<Comment>>
             {

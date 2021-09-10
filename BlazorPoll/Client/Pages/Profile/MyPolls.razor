@@ -31,25 +31,7 @@ else
 
     public int GetVotesSum(Poll poll)
     {
-        var count = 0;
-
-        foreach (var answer in poll.Answers)
-        {
-            count += answer.Count;
-        }
-
-        return count;
-    }
-
-    public string GetPollUrl(Poll poll)
-    {
-        return $"/poll/{poll.Id}";
-    }
-
-
-    private void NavigateToPollDetails(Poll poll)
-    {
-        NavigationManager.NavigateTo($"/poll/{poll.Id}");
+        return poll.Answers.Sum(answer => answer.Count);
     }
 
     public string GetCommentString(Poll poll)
@@ -57,4 +39,16 @@ else
         return poll.Comments.Count == 1 ? "Comment" : "Comments";
     }
 
+    private string GetPollUrl(Poll poll)
+    {
+        return $"/poll/{poll.Id}";
+    }
+
+
+    private void NavigateToPollDetails(Poll poll)
+    {
+        NavigationManager.NavigateTo(GetPollUrl(poll));
+    }
 }
+
+

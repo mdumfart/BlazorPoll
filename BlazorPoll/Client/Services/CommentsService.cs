@@ -40,7 +40,9 @@ namespace BlazorPoll.Client.Services
 
         public async Task<PaginatedWrapperDto<List<Comment>>> GetByUsernamePaginated(string username, int page)
         {
-            return await _httpClient.GetFromJsonAsync<PaginatedWrapperDto<List<Comment>>>($"/api/users/{username}/comments/{page}");
+            var t = await _httpClient.GetFromJsonAsync<PaginatedWrapperDto<List<Comment>>>($"/api/users/{username}/comments/{page}");
+
+            return t;
         }
 
         private StringContent GetStringContent(object o)

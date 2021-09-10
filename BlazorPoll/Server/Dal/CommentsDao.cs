@@ -54,7 +54,7 @@ namespace BlazorPoll.Server.Dal
         public async Task<PaginatedWrapperDto<List<Comment>>> FindPaginatedByPollId(Guid pollId, int page)
         {
             var skip = (page - 1) * PageSize;
-            var pageCount = (double)_context.Comments.Count() / PageSize;
+            var pageCount = (double)_context.Comments.Count(cmt => cmt.Poll.Id == pollId) / PageSize;
 
             var paginatedWrapper = new PaginatedWrapperDto<List<Comment>>
             {

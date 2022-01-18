@@ -91,13 +91,13 @@
                 if (createdComment != null)
                 {
                     Comment.Content = String.Empty;
-
                     if (Comments.CurrentPage == Comments.PageCount)
                     {
                         Comments.Data.Add(createdComment);
                     }
-                    else if (Comments == null)
+                    else if (Comments.Data.IsNullOrEmpty())
                     {
+                        Console.WriteLine(createdComment.Content);
                         Comments = new PaginatedWrapperDto<List<Comment>>()
                         {
                             AvailableRows = 1,

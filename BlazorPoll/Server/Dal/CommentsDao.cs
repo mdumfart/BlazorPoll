@@ -63,7 +63,7 @@ namespace BlazorPoll.Server.Dal
                 AvailableRows = _context.Comments.Count(c => c.Poll.Id == pollId),
                 Data = await _context.Comments
                     .Where(c => c.Poll.Id == pollId)
-                    .OrderByDescending(c => c.CreatedAt)
+                    .OrderBy(c => c.CreatedAt)
                     .Skip(skip)
                     .Take(PageSize)
                     .ToListAsync()
